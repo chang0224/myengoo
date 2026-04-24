@@ -1,7 +1,28 @@
 # 📚 Engoo 학습 인덱스
 
-> 총 1개 기사 · 마지막 업데이트: 2026-04-24
+> 총 2개 기사 · 마지막 업데이트: 2026-04-24
 
 | 날짜 | 제목 | 원문 | 통합 | 단어장 | 단어 수 |
 |------|------|------|------|--------|---------|
+| 2026-04-24 | Is AI Making People Retire Early? | [원문](contents/2026-04-24_ai-making-people-retire-early.md) | [📖](daily_news/2026-04-24_ai-making-people-retire-early.md) | [📚](words/2026-04-24_ai-making-people-retire-early.md) | 1 |
 | 2026-04-24 | Technology May Slow Cognitive Decline in Older Adults | [원문](contents/2026-04-24_technology-slow-cognitive-decline.md) | [📖](daily_news/2026-04-24_technology-slow-cognitive-decline.md) | [📚](words/2026-04-24_technology-slow-cognitive-decline.md) | 10 |
+
+---
+
+## 🎮 단어 외우기 앱 실행
+
+### 개발 모드 (코드 수정 시 즉시 반영)
+
+```bash
+cd app && npm run dev
+```
+
+`http://localhost:5173` 에서 확인. HMR(핫 리로딩)으로 코드 수정이 즉시 반영됩니다.
+
+### 프로덕션 빌드 프리뷰
+
+```bash
+cd app && npm run build && npx vite preview --port 4173
+```
+
+`http://localhost:4173` 에서 확인. 실제 배포와 동일한 빌드 결과물을 로컬에서 확인합니다.
