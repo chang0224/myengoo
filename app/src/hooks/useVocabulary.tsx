@@ -1,0 +1,179 @@
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import type { AppSettings, ParsedVocabularyFile, SRSRating, SRSRecord, StudyItem, VocabularyWord, KeyExpression } from '../types';
+import { parseVocabularyFile } from '../lib/parser';
+import { createNewSRSRecord, reviewCard as srsReviewCard, getDueItems, getNewItems, getTodayISO } from '../lib/srs';
+import { loadSRSRecords, saveSRSRecords, loadSettings, saveSettings } from '../lib/storage';
+
+const wordFileModules = import.meta.glob('../../../words/*.md', { query: '?raw', import: 'default' });
+
+interface VocabularyStore {
+  files: ParsedVocabularyFile[];
+  allWords: VocabularyWord[];
+  allExpressions: KeyExpression[];
+  allItems: StudyItem[];
+  availableDates: string[];  // sorted descending
+  isLoading: boolean;
+  getItemsByDate: (date: string) => StudyItem[];
+  getWordsByDate: (date: string) => VocabularyWord[];
+}
+
+interface SRSStore {
+  records: SRSRecord[];
+  getDueCount: () => number;
+  getDueRecords: () => SRSRecord[];
+  getNewItemIds: (itemIds: string[]) => string[];
+  reviewCard: (itemId: string, rating: SRSRating) => void;
+}
+
+interface SettingsStore {
+  settings: AppSettings;
+  updateSettings: (partial: Partial<AppSettings>) => void;
+}
+
+interface VocabularyContextValue {
+  vocabulary: VocabularyStore;
+  srs: SRSStore;
+  settings: SettingsStore;
+}
+
+const VocabularyContext = createContext<VocabularyContextValue | null>(null);
+
+export function VocabularyProvider({ children }: { children: React.ReactNode }) {
+  const [files, setFiles] = useState<ParsedVocabularyFile[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [srsRecords, setSrsRecords] = useState<SRSRecord[]>([]);
+  const [appSettings, setAppSettings] = useState<AppSettings>(() => loadSettings());
+
+  useEffect(() => {
+    async function loadFiles() {
+      const parsed: ParsedVocabularyFile[] = [];
+      const seenWords = new Set<string>();
+
+      for (const [path, loader] of Object.entries(wordFileModules)) {
+        try {
+          const content = await (loader as () => Promise<string>)();
+          const fileName = path.split('/').pop() ?? path;
+          const file = parseVocabularyFile(content, fileName);
+
+          const uniqueWords = file.words.filter(w => {
+            const key = w.word.toLowerCase();
+            if (seenWords.has(key)) return false;
+            seenWords.add(key);
+            return true;
+          });
+
+          parsed.push({ ...file, words: uniqueWords });
+        } catch (err) {
+          console.warn('[vocabulary] Failed to load file:', path, err);
+        }
+      }
+
+      parsed.sort((a, b) => b.date.localeCompare(a.date));
+      setFiles(parsed);
+      setIsLoading(false);
+    }
+
+    loadFiles();
+  }, []);
+
+  useEffect(() => {
+    setSrsRecords(loadSRSRecords());
+  }, []);
+
+  useEffect(() => {
+    if (appSettings.darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [appSettings.darkMode]);
+
+  const allWords = useMemo(() => files.flatMap(f => f.words), [files]);
+  const allExpressions = useMemo(() => files.flatMap(f => f.expressions), [files]);
+  const allItems = useMemo<StudyItem[]>(() => [...allWords, ...allExpressions], [allWords, allExpressions]);
+  const availableDates = useMemo(() => [...new Set(files.map(f => f.date))].sort((a, b) => b.localeCompare(a)), [files]);
+
+  const getItemsByDate = useCallback((date: string): StudyItem[] => {
+    const dateFiles = files.filter(f => f.date === date);
+    return dateFiles.flatMap(f => [...f.words, ...f.expressions]);
+  }, [files]);
+
+  const getWordsByDate = useCallback((date: string): VocabularyWord[] => {
+    return files.filter(f => f.date === date).flatMap(f => f.words);
+  }, [files]);
+
+  const vocabulary: VocabularyStore = useMemo(() => ({
+    files,
+    allWords,
+    allExpressions,
+    allItems,
+    availableDates,
+    isLoading,
+    getItemsByDate,
+    getWordsByDate,
+  }), [files, allWords, allExpressions, allItems, availableDates, isLoading, getItemsByDate, getWordsByDate]);
+
+  const today = getTodayISO();
+
+  const getDueCount = useCallback(() => getDueItems(srsRecords, today).length, [srsRecords, today]);
+  const getDueRecords = useCallback(() => getDueItems(srsRecords, today), [srsRecords, today]);
+  const getNewItemIds = useCallback((itemIds: string[]) => getNewItems(itemIds, srsRecords), [srsRecords]);
+
+  const reviewCard = useCallback((itemId: string, rating: SRSRating) => {
+    setSrsRecords(prev => {
+      const existing = prev.find(r => r.itemId === itemId);
+      const record = existing ?? createNewSRSRecord(itemId);
+      const updated = srsReviewCard(record, rating);
+      const next = existing
+        ? prev.map(r => r.itemId === itemId ? updated : r)
+        : [...prev, updated];
+      saveSRSRecords(next);
+      return next;
+    });
+  }, []);
+
+  const srs: SRSStore = useMemo(() => ({
+    records: srsRecords,
+    getDueCount,
+    getDueRecords,
+    getNewItemIds,
+    reviewCard,
+  }), [srsRecords, getDueCount, getDueRecords, getNewItemIds, reviewCard]);
+
+  const updateSettings = useCallback((partial: Partial<AppSettings>) => {
+    setAppSettings(prev => {
+      const next = { ...prev, ...partial };
+      saveSettings(next);
+      return next;
+    });
+  }, []);
+
+  const settings: SettingsStore = useMemo(() => ({
+    settings: appSettings,
+    updateSettings,
+  }), [appSettings, updateSettings]);
+
+  return (
+    <VocabularyContext.Provider value={{ vocabulary, srs, settings }}>
+      {children}
+    </VocabularyContext.Provider>
+  );
+}
+
+export function useVocabulary(): VocabularyStore {
+  const ctx = useContext(VocabularyContext);
+  if (!ctx) throw new Error('useVocabulary must be used within VocabularyProvider');
+  return ctx.vocabulary;
+}
+
+export function useSRS(): SRSStore {
+  const ctx = useContext(VocabularyContext);
+  if (!ctx) throw new Error('useSRS must be used within VocabularyProvider');
+  return ctx.srs;
+}
+
+export function useSettings(): SettingsStore {
+  const ctx = useContext(VocabularyContext);
+  if (!ctx) throw new Error('useSettings must be used within VocabularyProvider');
+  return ctx.settings;
+}

@@ -16,6 +16,24 @@ description: Convert English articles into Korean study materials using 직독�
 
 ---
 
+## Obsidian 호환 규칙 (핵심)
+
+이 스킬의 모든 파일은 **Obsidian에서 상호 참조가 동작**해야 합니다.
+
+**절대 금지:** `<a id="..."></a>` HTML 앵커 태그. Obsidian에서 링크 타겟으로 인식되지 않습니다.
+
+**앵커 생성:** 마크다운 헤딩(`#`, `##`, `###`, `####`)만 사용. 헤딩 텍스트가 자동으로 Obsidian 앵커가 됩니다.
+
+| 파일 | 문단 헤딩 | Exercise 헤딩 | 링크 예시 |
+|------|-----------|---------------|-----------|
+| `contents/` | `#### ¶1` | `#### Ex.3` | (타겟 전용 — 다른 파일에서 링크해 옴) |
+| `daily_news/` | `### ¶1` | `### Ex.3` | 같은 파일: `[¶1](#¶1)` |
+| `words/` | (헤딩 없음) | (헤딩 없음) | cross-file: `[¶1](../contents/파일.md#¶1)` |
+
+**3파일 상호 참조:** 모든 파일 상단에 다른 2개 파일로의 네비게이션 링크를 배치합니다.
+
+---
+
 ## 작업 흐름
 
 ### 1단계: 기사 본문 확보
@@ -82,7 +100,7 @@ were less likely / to experience cognitive decline.
 
 ```markdown
 **cognitive** /ˈkɑːɡnətɪv/ [형용사] 인지의, 인식의
-- 본문 [¶2](#p2): "technology may slow **cognitive** decline in older adults"
+- 본문 [¶2](#¶2): "technology may slow **cognitive** decline in older adults"
 - 예문: Reading regularly can sharpen your cognitive skills.
 ```
 
@@ -90,12 +108,15 @@ were less likely / to experience cognitive decline.
 - 품사는 한국어로: 명사/동사/형용사/부사/전치사/접속사/구동사
 - 한국어 뜻은 본문 맥락에 맞는 것을 **첫 번째**로, 주요 다른 뜻이 있으면 쉼표로 추가
 - 예문은 짧고 자연스러운 B1~B2 수준 문장
-- **본문 링크 필수**: 단어가 처음 등장한 문단 번호를 `[¶N](#pN)` 형식으로 표시. 이 링크는 `daily_news/` 파일에서는 같은 파일 내 앵커로 점프하고, `words/` 파일에서는 `../contents/{파일명}.md#pN`으로 원문 파일의 해당 문단으로 점프합니다 (상세는 4단계 참조).
+- **본문 링크 필수**: 단어가 처음 등장한 문단의 헤딩 앵커를 링크합니다.
+  - `daily_news/` 파일: 같은 파일 내 헤딩 링크 `[¶N](#¶N)`
+  - `words/` 파일: cross-file 헤딩 링크 `[¶N](../contents/{파일명}.md#¶N)`
+  - Exercise에만 등장하는 단어: `[Ex.N](#Ex.N)` 또는 `[Ex.N](../contents/{파일명}.md#Ex.N)`
 - 같은 단어가 여러 문단에 나오면 **처음 등장한 문단** 기준.
 
 ### 4단계: 파일 출력 (3개 파일로 분리)
 
-결과를 **3개 파일**로 나눠 저장합니다. 출력 루트는 git의 루트디렉토리 이거나 index 파일이 있는 top 디렉토리입니다 (환경에 따라 사용자 지정 경로일 수 있음).
+결과를 **3개 파일**로 나눠 저장합니다. 출력 루트는 git 루트 디렉토리이거나 `index.md`가 있는 최상위 디렉토리입니다.
 
 **디렉토리 구조:**
 
@@ -117,77 +138,110 @@ were less likely / to experience cognitive decline.
   - 예: "Technology May Slow Cognitive Decline in Older Adults" → `technology-slow-cognitive-decline`
 - 세 파일의 이름은 **완전히 동일**하게 맞춥니다 (세 디렉토리에 같은 이름).
 
+---
+
 **① `contents/{date}_{slug}.md` — 원문 전용**
 
-기사 제목 + 메타 + 영어 원문만. 번역·주석 없음. **각 문단마다 HTML 앵커를 붙입니다** (단어장/표현에서 링크로 점프해올 때 타겟).
+기사 제목 + 메타 + 영어 원문만. 번역·주석 없음. **각 문단 위에 `#### ¶N` 헤딩**을 붙여 Obsidian 앵커로 사용합니다. Exercise 섹션은 `#### Ex.N` 헤딩.
 
 ```markdown
 # {기사 제목}
 
 > 출처: {URL if available}
 > 저장일: YYYY-MM-DD
+> 📖 [직독직해](../daily_news/{같은 파일명}.md) · 📚 [단어장](../words/{같은 파일명}.md)
 
 ---
 
-<a id="p1"></a>
+#### ¶1
+
 {1번째 문단}
 
-<a id="p2"></a>
+#### ¶2
+
 {2번째 문단}
 
-<a id="p3"></a>
+#### ¶3
+
 {3번째 문단}
 
 ...
+
+---
+
+#### Ex.3
+
+**Questions**
+
+{질문들}
+
+#### Ex.4
+
+**Discussion**
+
+{토론 질문들}
+
+#### Ex.5
+
+**Further Discussion**
+
+{추가 토론 질문들}
 ```
 
-앵커 ID는 `p1`, `p2`, ... 형식 (ASCII만 사용). 문단 번호는 원문 그대로의 순서 기준.
+헤딩 `#### ¶1`, `#### Ex.3` 등이 Obsidian에서 자동 앵커가 됩니다. **`<a id>` 태그 사용 금지.**
+
+---
 
 **② `words/{date}_{slug}.md` — 단어장 전용**
 
-B2+ 단어와 핵심 표현만. 단어 암기·Anki 변환 등에 쓰기 편하도록 원문·직독직해 없음. **본문 링크는 원문 파일(`contents/`)의 해당 문단으로 cross-file 링크**.
+B2+ 단어와 핵심 표현만. 본문 링크는 `contents/` 파일의 헤딩 앵커로 **cross-file 링크**.
 
 ```markdown
 # 단어장: {기사 제목}
 
 > 저장일: YYYY-MM-DD
-> 원문: [../contents/{같은 파일명}.md](../contents/{같은 파일명}.md)
+> 📄 [원문](../contents/{같은 파일명}.md) · 📖 [직독직해](../daily_news/{같은 파일명}.md)
+
+---
 
 ## 📚 B2+ 단어장
 
 **word** /ipa/ [품사] 뜻
-- 본문 [¶N](../contents/{같은 파일명}.md#pN): "... **word** ..."
+- 본문 [¶N](../contents/{같은 파일명}.md#¶N): "... **word** ..."
 - 예문: ...
 
 ...
 
+---
+
 ## 💡 핵심 표현
 
-- **표현** [¶N](../contents/{같은 파일명}.md#pN) : 한국어 설명
+- **표현** [¶N](../contents/{같은 파일명}.md#¶N) — 한국어 설명
 ```
 
-링크 타겟은 **`contents/` 파일의 앵커**를 가리킵니다 (상대 경로 `../contents/...`).
+링크 타겟은 `contents/` 파일의 `#### ¶N` 헤딩입니다. Exercise 전용 단어는 `../contents/{파일명}.md#Ex.N`.
+
+---
 
 **③ `daily_news/{date}_{slug}.md` — 통합 학습본**
 
-직독직해 + 단어장 + 핵심 표현 모두 포함. 이 파일이 실제 학습의 메인입니다. **직독직해의 각 ¶ 섹션에 앵커를 붙여서** 단어장에서 같은 파일 내 점프가 가능하게 합니다.
+직독직해 + 단어장 + 핵심 표현 모두 포함. **`### ¶N` 헤딩 자체가 Obsidian 앵커**이므로 단어장에서 같은 파일 내 점프가 가능합니다. `<a id>` 태그를 쓰지 않습니다.
 
 ```markdown
 # {기사 제목}
 
-> 출처: {URL}  
+> 출처: {URL}
 > 학습일: YYYY-MM-DD
+> 📄 [원문](../contents/{같은 파일명}.md) · 📚 [단어장](../words/{같은 파일명}.md)
 
 ---
 
 ## 📖 직독직해
 
-<a id="p1"></a>
 ### ¶1
 
 {¶1 직독직해}
 
-<a id="p2"></a>
 ### ¶2
 
 {¶2 직독직해}
@@ -196,10 +250,34 @@ B2+ 단어와 핵심 표현만. 단어 암기·Anki 변환 등에 쓰기 편하�
 
 ---
 
+### Ex.3
+
+**Questions 직독직해**
+
+{Exercise 3 직독직해}
+
+---
+
+### Ex.4
+
+**Discussion 직독직해**
+
+{Exercise 4 직독직해}
+
+---
+
+### Ex.5
+
+**Further Discussion 직독직해**
+
+{Exercise 5 직독직해}
+
+---
+
 ## 📚 B2+ 단어장
 
 **word** /ipa/ [품사] 뜻
-- 본문 [¶N](#pN): "... **word** ..."
+- 본문 [¶N](#¶N): "... **word** ..."
 - 예문: ...
 
 ...
@@ -208,14 +286,14 @@ B2+ 단어와 핵심 표현만. 단어 암기·Anki 변환 등에 쓰기 편하�
 
 ## 💡 핵심 표현
 
-- **표현** [¶N](#pN) : 한국어 설명
+- **표현** [¶N](#¶N) — 한국어 설명
 ```
 
-같은 파일 내 링크이므로 `(#pN)` 형식 (경로 없음). 앵커 ID는 `contents/` 파일과 **동일한 `p1`, `p2`** 를 씁니다.
+같은 파일 내 링크이므로 `(#¶N)` 형식 (경로 없음). `### ¶1` 헤딩이 Obsidian에서 자동 앵커가 됩니다. Exercise 전용 단어는 `(#Ex.N)`.
 
 ### 5단계: 인덱스 갱신
 
-최상위 `/mnt/user-data/outputs/index.md`를 확인하고 갱신합니다.
+git 루트 디렉토리의 `index.md`를 확인하고 갱신합니다.
 
 **절차:**
 1. 기존 `index.md`가 있으면 읽어서 기존 엔트리를 보존합니다.
@@ -239,7 +317,7 @@ B2+ 단어와 핵심 표현만. 단어 암기·Anki 변환 등에 쓰기 편하�
 
 ### 6단계: 사용자에게 제시
 
-`present_files`로 **4개 파일** (index, contents, daily_news, words)을 보여줍니다. 순서는: ①index.md → ②daily_news(통합) → ③words(단어장) → ④contents(원문). 인덱스를 먼저 보여줘서 전체 조감이 먼저 들어오게 합니다.
+**4개 파일** (index, contents, daily_news, words)을 사용자에게 안내합니다. 순서는: ①index.md → ②daily_news(통합) → ③words(단어장) → ④contents(원문). 각 파일의 역할과 상호 링크 구조를 간단히 설명합니다.
 
 ---
 
@@ -251,13 +329,14 @@ B2+ 단어와 핵심 표현만. 단어 암기·Anki 변환 등에 쓰기 편하�
 - [ ] 영어 어순 그대로 한국어가 대응되는가 (자연스럽게 재배열하지 않음)
 - [ ] 단어장에 A1~B1 쉬운 단어가 섞여 있지 않은가 (한국 고졸 수준 단어 제외)
 - [ ] 모든 단어에 IPA · 품사 · 한국어 뜻 · **본문 링크** · 예문이 있는가
-- [ ] 핵심 표현에도 **본문 링크** `[¶N](#pN 또는 ../contents/...)`가 있는가
-- [ ] `contents/` 파일 각 문단에 `<a id="pN"></a>` 앵커가 달려 있는가
-- [ ] `daily_news/` 파일 각 `### ¶N` 앞에 `<a id="pN"></a>` 앵커가 달려 있는가
-- [ ] `daily_news/` 내 링크는 `(#pN)`, `words/` 내 링크는 `(../contents/파일명.md#pN)` 형식인가
-- [ ] 3개 파일 (contents/, daily_news/, words/)이 각자 **동일한 파일명**으로 저장됐는가
+- [ ] 핵심 표현에도 **본문 링크** `[¶N](#¶N)` 또는 `(../contents/...#¶N)` 가 있는가
+- [ ] `contents/` 파일: 각 문단에 `#### ¶N` 헤딩, Exercise에 `#### Ex.N` 헤딩이 있는가
+- [ ] `daily_news/` 파일: 각 직독직해에 `### ¶N` 헤딩, Exercise에 `### Ex.N` 헤딩이 있는가
+- [ ] **`<a id>` HTML 태그가 어디에도 없는가** (Obsidian 비호환 — 사용 금지)
+- [ ] `daily_news/` 내 링크는 `(#¶N)`, `words/` 내 링크는 `(../contents/파일명.md#¶N)` 형식인가
+- [ ] 3개 파일이 각자 **동일한 파일명**으로 저장됐는가
 - [ ] `index.md`가 최신 기사를 최상단에 추가하고 총 개수·업데이트 날짜를 갱신했는가
-- [ ] `present_files`로 4개 파일 (index + 3개)이 모두 제시됐는가
+- [ ] 사용자에게 4개 파일 (index + 3개)이 모두 안내됐는가
 
 ---
 

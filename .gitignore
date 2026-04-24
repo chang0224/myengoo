@@ -1,0 +1,9 @@
+.DS_Store
+.obsidian/
+.sisyphus/
+.claude/settings.json
+.claude/settings.local.json
+.claude/skills/engoo-study/.playwright-mcp/
+.claude/skills/engoo-study/*.png
+app/node_modules/
+app/dist/
