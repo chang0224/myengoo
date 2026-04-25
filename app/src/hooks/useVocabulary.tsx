@@ -5,6 +5,15 @@ import { createNewSRSRecord, reviewCard as srsReviewCard, getDueItems, getNewIte
 import { loadSRSRecords, saveSRSRecords, loadSettings, saveSettings } from '../lib/storage';
 
 const wordFileModules = import.meta.glob('../../../words/*.md', { query: '?raw', import: 'default' });
+const contentsModules = import.meta.glob('../../../contents/*.md', { query: '?raw', import: 'default' });
+const dailyNewsModules = import.meta.glob('../../../daily_news/*.md', { query: '?raw', import: 'default' });
+
+interface ArticleFile {
+  fileName: string;
+  date: string;
+  title: string;
+  content: string;
+}
 
 interface VocabularyStore {
   files: ParsedVocabularyFile[];
@@ -15,6 +24,8 @@ interface VocabularyStore {
   isLoading: boolean;
   getItemsByDate: (date: string) => StudyItem[];
   getWordsByDate: (date: string) => VocabularyWord[];
+  contentsFiles: ArticleFile[];
+  dailyNewsFiles: ArticleFile[];
 }
 
 interface SRSStore {
@@ -41,6 +52,8 @@ const VocabularyContext = createContext<VocabularyContextValue | null>(null);
 export function VocabularyProvider({ children }: { children: React.ReactNode }) {
   const [files, setFiles] = useState<ParsedVocabularyFile[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [contentsFiles, setContentsFiles] = useState<ArticleFile[]>([]);
+  const [dailyNewsFiles, setDailyNewsFiles] = useState<ArticleFile[]>([]);
   const [srsRecords, setSrsRecords] = useState<SRSRecord[]>([]);
   const [appSettings, setAppSettings] = useState<AppSettings>(() => loadSettings());
 
@@ -70,6 +83,39 @@ export function VocabularyProvider({ children }: { children: React.ReactNode }) 
 
       parsed.sort((a, b) => b.date.localeCompare(a.date));
       setFiles(parsed);
+
+      const loadedContents: ArticleFile[] = [];
+      for (const [path, loader] of Object.entries(contentsModules)) {
+        try {
+          const content = await (loader as () => Promise<string>)();
+          const fileName = path.split('/').pop() ?? path;
+          const date = fileName.match(/^(\d{4}-\d{2}-\d{2})/)?.[1] ?? '';
+          const titleMatch = content.match(/^#\s+(.+)$/m);
+          const title = titleMatch?.[1] ?? fileName;
+          loadedContents.push({ fileName, date, title, content });
+        } catch (err) {
+          console.warn('[vocabulary] Failed to load contents file:', path, err);
+        }
+      }
+      loadedContents.sort((a, b) => b.date.localeCompare(a.date));
+      setContentsFiles(loadedContents);
+
+      const loadedDailyNews: ArticleFile[] = [];
+      for (const [path, loader] of Object.entries(dailyNewsModules)) {
+        try {
+          const content = await (loader as () => Promise<string>)();
+          const fileName = path.split('/').pop() ?? path;
+          const date = fileName.match(/^(\d{4}-\d{2}-\d{2})/)?.[1] ?? '';
+          const titleMatch = content.match(/^#\s+(.+)$/m);
+          const title = titleMatch?.[1] ?? fileName;
+          loadedDailyNews.push({ fileName, date, title, content });
+        } catch (err) {
+          console.warn('[vocabulary] Failed to load daily_news file:', path, err);
+        }
+      }
+      loadedDailyNews.sort((a, b) => b.date.localeCompare(a.date));
+      setDailyNewsFiles(loadedDailyNews);
+
       setIsLoading(false);
     }
 
@@ -111,7 +157,9 @@ export function VocabularyProvider({ children }: { children: React.ReactNode }) 
     isLoading,
     getItemsByDate,
     getWordsByDate,
-  }), [files, allWords, allExpressions, allItems, availableDates, isLoading, getItemsByDate, getWordsByDate]);
+    contentsFiles,
+    dailyNewsFiles,
+  }), [files, allWords, allExpressions, allItems, availableDates, isLoading, getItemsByDate, getWordsByDate, contentsFiles, dailyNewsFiles]);
 
   const today = getTodayISO();
 

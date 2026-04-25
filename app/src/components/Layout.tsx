@@ -3,9 +3,9 @@ import { useSettings } from '../hooks/useVocabulary';
 
 const navItems = [
   { to: '/', label: '홈', icon: '🏠', end: true },
-  { to: '/flashcard', label: '플래시카드', icon: '🃏', end: false },
-  { to: '/quiz', label: '퀴즈', icon: '❓', end: false },
-  { to: '/fill-blank', label: '빈칸', icon: '✏️', end: false },
+  { to: '/contents', label: '원문', icon: '📄', end: false },
+  { to: '/daily-news', label: '직독직해', icon: '📝', end: false },
+  { to: '/study', label: '학습', icon: '📚', end: false },
   { to: '/review', label: '복습', icon: '🔄', end: false },
 ];
 

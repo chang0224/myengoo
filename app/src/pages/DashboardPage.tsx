@@ -4,9 +4,9 @@ import { useStudyScope } from '../hooks/useStudyScope';
 import { useSRS, useVocabulary } from '../hooks/useVocabulary';
 
 const MODES = [
-  { to: '/flashcard', icon: '🃏', title: '플래시카드', desc: '모든 카드 넘겨보기' },
-  { to: '/quiz', icon: '❓', title: '4지선다 퀴즈', desc: '영↔한 퀴즈' },
-  { to: '/fill-blank', icon: '✏️', title: '빈칸 채우기', desc: '예문 속 단어 맞추기' },
+  { to: '/contents', icon: '📄', title: '원문 읽기', desc: '영어 기사 원문' },
+  { to: '/daily-news', icon: '📝', title: '직독직해', desc: '끊어읽기 해석' },
+  { to: '/study', icon: '📚', title: '단어 학습', desc: '카드/퀴즈/빈칸' },
   { to: '/review', icon: '🔄', title: 'SRS 복습', desc: null },
 ];
 
