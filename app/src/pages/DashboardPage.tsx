@@ -12,7 +12,7 @@ const MODES = [
 
 export default function DashboardPage() {
   const navigate = useNavigate();
-  const { selectedDate, setSelectedDate } = useStudyScope();
+  const { dateRange, setDateRange } = useStudyScope();
   const { allWords, allExpressions, files, isLoading } = useVocabulary();
   const { getDueCount } = useSRS();
   const dueCount = getDueCount();
@@ -37,7 +37,7 @@ export default function DashboardPage() {
 
   return (
     <div className="flex flex-col">
-      <StudyScopeSelector selectedDate={selectedDate} onSelectDate={setSelectedDate} />
+      <StudyScopeSelector dateRange={dateRange} onChangeDateRange={setDateRange} />
 
       <div className="p-4 flex flex-col gap-4">
         <div className="grid grid-cols-2 gap-3">

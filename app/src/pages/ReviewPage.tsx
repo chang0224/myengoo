@@ -58,7 +58,7 @@ function ItemCard({ item, flipped }: { item: StudyItem; flipped: boolean }) {
 }
 
 export default function ReviewPage() {
-  const { selectedDate, setSelectedDate, filteredItems } = useStudyScope();
+  const { dateRange, setDateRange, filteredItems } = useStudyScope();
   const { allItems } = useVocabulary();
   const { records, reviewCard } = useSRS();
   const [queue, setQueue] = useState<StudyItem[]>([]);
@@ -135,7 +135,7 @@ export default function ReviewPage() {
 
     return (
       <div className="flex flex-col h-full">
-        <StudyScopeSelector selectedDate={selectedDate} onSelectDate={setSelectedDate} />
+        <StudyScopeSelector dateRange={dateRange} onChangeDateRange={setDateRange} />
         <div className="flex flex-col items-center justify-center flex-1 p-8 text-center gap-3">
           <p className="text-5xl">🎉</p>
           <p className="text-xl font-bold text-gray-900 dark:text-white">복습할 카드가 없습니다!</p>
@@ -157,7 +157,7 @@ export default function ReviewPage() {
 
     return (
       <div className="flex flex-col h-full">
-        <StudyScopeSelector selectedDate={selectedDate} onSelectDate={setSelectedDate} />
+        <StudyScopeSelector dateRange={dateRange} onChangeDateRange={setDateRange} />
         <div className="flex flex-col items-center justify-center flex-1 p-8 text-center gap-4">
           <p className="text-5xl">✅</p>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">복습 완료!</h2>
@@ -186,7 +186,7 @@ export default function ReviewPage() {
 
   return (
     <div className="flex flex-col h-full">
-      <StudyScopeSelector selectedDate={selectedDate} onSelectDate={setSelectedDate} />
+      <StudyScopeSelector dateRange={dateRange} onChangeDateRange={setDateRange} />
 
       <div className="flex flex-col flex-1 p-4 gap-4">
         <div className="flex items-center justify-between">

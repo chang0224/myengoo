@@ -6,7 +6,7 @@ import { checkAnswer, createFillBlankQuestion, type FillBlankQuestion } from '..
 type AnswerState = 'idle' | 'correct' | 'wrong';
 
 export default function FillBlankPage() {
-  const { selectedDate, setSelectedDate, filteredWords } = useStudyScope();
+  const { dateRange, setDateRange, filteredWords } = useStudyScope();
   const [questions, setQuestions] = useState<FillBlankQuestion[]>([]);
   const [qIndex, setQIndex] = useState(0);
   const [input, setInput] = useState('');
@@ -65,7 +65,7 @@ export default function FillBlankPage() {
   if (filteredWords.length === 0) {
     return (
       <div className="flex flex-col h-full">
-        <StudyScopeSelector selectedDate={selectedDate} onSelectDate={setSelectedDate} />
+        <StudyScopeSelector dateRange={dateRange} onChangeDateRange={setDateRange} />
         <div className="flex flex-col items-center justify-center flex-1 p-8 text-center">
           <p className="text-4xl mb-4">✏️</p>
           <p className="text-gray-500 dark:text-gray-400">빈칸 채우기에 사용할 단어가 없습니다.</p>
@@ -79,7 +79,7 @@ export default function FillBlankPage() {
     const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
     return (
       <div className="flex flex-col h-full">
-        <StudyScopeSelector selectedDate={selectedDate} onSelectDate={setSelectedDate} />
+        <StudyScopeSelector dateRange={dateRange} onChangeDateRange={setDateRange} />
         <div className="flex flex-col items-center justify-center flex-1 p-8 text-center gap-4">
           <p className="text-5xl">{pct >= 80 ? '🎉' : '💪'}</p>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">세션 완료!</h2>
@@ -112,7 +112,7 @@ export default function FillBlankPage() {
 
   return (
     <div className="flex flex-col h-full">
-      <StudyScopeSelector selectedDate={selectedDate} onSelectDate={setSelectedDate} />
+      <StudyScopeSelector dateRange={dateRange} onChangeDateRange={setDateRange} />
 
       <div className="flex flex-col flex-1 p-4 gap-4">
         <div className="flex items-center justify-between">

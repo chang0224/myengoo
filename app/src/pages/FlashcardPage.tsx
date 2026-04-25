@@ -49,7 +49,7 @@ function CardBack({ item }: { item: StudyItem }) {
 }
 
 export default function FlashcardPage() {
-  const { selectedDate, setSelectedDate, filteredItems } = useStudyScope();
+  const { dateRange, setDateRange, filteredItems } = useStudyScope();
   const [index, setIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [shuffled, setShuffled] = useState<StudyItem[]>([]);
@@ -96,7 +96,7 @@ export default function FlashcardPage() {
 
   return (
     <div className="flex flex-col">
-      <StudyScopeSelector selectedDate={selectedDate} onSelectDate={setSelectedDate} />
+      <StudyScopeSelector dateRange={dateRange} onChangeDateRange={setDateRange} />
 
       {total === 0 ? (
         <div className="flex flex-col items-center justify-center flex-1 p-8 text-center">
