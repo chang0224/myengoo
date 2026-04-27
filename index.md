@@ -1,9 +1,10 @@
 # 📚 Engoo 학습 인덱스
 
-> 총 3개 기사 · 마지막 업데이트: 2026-04-25
+> 총 4개 기사 · 마지막 업데이트: 2026-04-27
 
 | 날짜 | 제목 | 원문 | 통합 | 단어장 | 단어 수 |
 |------|------|------|------|--------|---------|
+| 2026-04-27 | Nuclear Power Is Making a Comeback — Here's Why | [원문](contents/2026-04-27_nuclear-power-making-comeback.md) | [📖](daily_news/2026-04-27_nuclear-power-making-comeback.md) | [📚](words/2026-04-27_nuclear-power-making-comeback.md) | 10 |
 | 2026-04-25 | Many Workers Still Hesitant to Use AI, Study Says | [원문](contents/2026-04-25_workers-hesitant-use-ai.md) | [📖](daily_news/2026-04-25_workers-hesitant-use-ai.md) | [📚](words/2026-04-25_workers-hesitant-use-ai.md) | 4 |
 | 2026-04-24 | Is AI Making People Retire Early? | [원문](contents/2026-04-24_ai-making-people-retire-early.md) | [📖](daily_news/2026-04-24_ai-making-people-retire-early.md) | [📚](words/2026-04-24_ai-making-people-retire-early.md) | 1 |
 | 2026-04-24 | Technology May Slow Cognitive Decline in Older Adults | [원문](contents/2026-04-24_technology-slow-cognitive-decline.md) | [📖](daily_news/2026-04-24_technology-slow-cognitive-decline.md) | [📚](words/2026-04-24_technology-slow-cognitive-decline.md) | 10 |
