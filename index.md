@@ -1,9 +1,10 @@
 # 📚 Engoo 학습 인덱스
 
-> 총 5개 기사 · 마지막 업데이트: 2026-05-04
+> 총 6개 기사 · 마지막 업데이트: 2026-05-06
 
 | 날짜 | 제목 | 원문 | 통합 | 단어장 | 단어 수 |
 |------|------|------|------|--------|---------|
+| 2026-05-06 | Microsoft Offers Thousands of Staff Voluntary Retirement | [원문](contents/2026-05-06_microsoft-voluntary-retirement.md) | [📖](daily_news/2026-05-06_microsoft-voluntary-retirement.md) | [📚](words/2026-05-06_microsoft-voluntary-retirement.md) | 8 |
 | 2026-05-04 | DNA and the Discovery of 'The Secret of Life' | [원문](contents/2026-05-04_dna-discovery-secret-life.md) | [📖](daily_news/2026-05-04_dna-discovery-secret-life.md) | [📚](words/2026-05-04_dna-discovery-secret-life.md) | 11 |
 | 2026-04-27 | Nuclear Power Is Making a Comeback — Here's Why | [원문](contents/2026-04-27_nuclear-power-making-comeback.md) | [📖](daily_news/2026-04-27_nuclear-power-making-comeback.md) | [📚](words/2026-04-27_nuclear-power-making-comeback.md) | 10 |
 | 2026-04-25 | Many Workers Still Hesitant to Use AI, Study Says | [원문](contents/2026-04-25_workers-hesitant-use-ai.md) | [📖](daily_news/2026-04-25_workers-hesitant-use-ai.md) | [📚](words/2026-04-25_workers-hesitant-use-ai.md) | 4 |
