@@ -1,0 +1,24 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+
+const base = import.meta.env.BASE_URL;
+---
+<header
+  class="sticky top-0 z-50 px-4 py-3 flex items-center gap-4"
+  style="background-color: var(--bg); border-bottom: 1px solid var(--border);"
+>
+  <a
+    href={base}
+    class="flex flex-col leading-tight flex-shrink-0"
+    style="text-decoration: none; color: var(--fg);"
+  >
+    <span class="font-bold text-lg">MyEngoo</span>
+    <span class="text-xs" style="color: var(--muted);">학습 아카이브</span>
+  </a>
+
+  <div class="flex-1">
+    <slot name="search" />
+  </div>
+
+  <ThemeToggle />
+</header>
