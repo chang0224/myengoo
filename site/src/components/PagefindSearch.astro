@@ -1,0 +1,23 @@
+---
+// PagefindSearch.astro — client-side search using Pagefind UI
+const base = import.meta.env.BASE_URL;
+---
+<div id="pagefind-search" class="w-full max-w-sm"></div>
+
+<link rel="stylesheet" href={`${base}pagefind/pagefind-ui.css`} />
+<script define:vars={{ base }}>
+  async function initSearch() {
+    const { PagefindUI } = await import(`${base}pagefind/pagefind-ui.js`);
+    new PagefindUI({
+      element: '#pagefind-search',
+      showImages: false,
+      bundlePath: `${base}pagefind/`,
+      resetStyles: false,
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSearch);
+  } else {
+    initSearch();
+  }
+</script>
