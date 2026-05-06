@@ -11,3 +11,4 @@ app/dist/
 site/dist/
 site/node_modules/
 site/.astro/
+.playwright-mcp/
