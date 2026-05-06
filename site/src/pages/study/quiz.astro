@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import EmptyState from '../../components/EmptyState.astro';
+import Quiz from '../../components/study/Quiz';
+import { loadStudyItems } from '../../lib/aggregator';
+
+const { allItems } = await loadStudyItems();
+const base = import.meta.env.BASE_URL;
+---
+<BaseLayout title="4지선다 퀴즈" description="단어와 뜻을 객관식으로 풀어봅니다">
+	<div class="mb-6 flex items-center justify-between">
+		<div>
+			<h1 class="text-2xl font-bold" style="color: var(--fg);">🎯 4지선다 퀴즈</h1>
+			<p class="text-sm mt-1" style="color: var(--muted);">단축키: 1-4=답 선택, Enter=다음</p>
+		</div>
+		<a
+			href={`${base}study/`}
+			class="text-sm px-3 py-2 rounded-lg"
+			style="color: var(--muted); border: 1px solid var(--border); min-height: 44px; display: inline-flex; align-items: center;"
+		>
+			← 학습 메뉴
+		</a>
+	</div>
+
+	<div data-pagefind-ignore>
+		{allItems.length === 0 ? (
+			<EmptyState message="퀴즈로 만들 항목이 없어요" />
+		) : (
+			<Quiz items={allItems} client:idle />
+		)}
+	</div>
+</BaseLayout>
