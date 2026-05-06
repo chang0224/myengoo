@@ -1,21 +1,12 @@
 ---
-
 import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
 
 const contents = await getCollection('contents');
 const dailyNews = await getCollection('dailyNews');
 const words = await getCollection('words');
-
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>MyEngoo</title>
-	</head>
-	<body>
-		<p>{contents.length} articles | {dailyNews.length} daily-news | {words.length} words</p>
-	</body>
-</html>
+<BaseLayout>
+  <p>{contents.length} articles | {dailyNews.length} daily-news | {words.length} words</p>
+</BaseLayout>

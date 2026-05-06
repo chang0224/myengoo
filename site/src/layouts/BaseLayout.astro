@@ -1,0 +1,48 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'MyEngoo',
+  description = 'Engoo 기사로 영어 공부하는 학습 아카이브',
+} = Astro.props;
+
+const pageTitle = title === 'MyEngoo'
+  ? 'MyEngoo — 학습 아카이브'
+  : `${title} | MyEngoo`;
+---
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+
+    <!-- Dark mode: runs synchronously before first paint to prevent FOUC -->
+    <script is:inline>
+      (function () {
+        const saved = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (saved === 'dark' || (!saved && prefersDark)) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
+  </head>
+  <body class="min-h-screen">
+    <slot name="header" />
+    <main>
+      <slot />
+    </main>
+    <footer class="mt-auto py-6 text-center text-sm" style="color: var(--muted);">
+      © 2026 MyEngoo
+    </footer>
+  </body>
+</html>
