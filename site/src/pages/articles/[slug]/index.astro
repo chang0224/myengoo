@@ -139,6 +139,7 @@ const activeTab = url.searchParams.get('tab') ?? 'original';
   <div
     role="tabpanel"
     data-tab="words"
+    data-pagefind-body
     style={activeTab !== 'words' ? 'display: none;' : ''}
   >
     {vocabData.b2.length === 0 && vocabData.keyExpressions.length === 0 ? (
