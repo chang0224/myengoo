@@ -1,0 +1,222 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import B2WordCard from '../../../components/B2WordCard.astro';
+import KeyExpressionCard from '../../../components/KeyExpressionCard.astro';
+import EmptyState from '../../../components/EmptyState.astro';
+import { extractMeta } from '../../../lib/content/extract-meta';
+import { parseWordsFile } from '../../../lib/parsers/words-parser';
+import { rewriteLink } from '../../../lib/markdown/rewrite-link';
+
+export async function getStaticPaths() {
+  const contentsEntries = await getCollection('contents');
+  const dailyNewsEntries = await getCollection('dailyNews');
+  const wordsEntries = await getCollection('words');
+
+  // Build lookup maps by slug
+  const dailyNewsMap = new Map(dailyNewsEntries.map((e) => [e.id, e]));
+  const wordsMap = new Map(wordsEntries.map((e) => [e.id, e]));
+
+  return contentsEntries.map((entry) => ({
+    params: { slug: entry.id },
+    props: {
+      contentEntry: entry,
+      dailyNewsEntry: dailyNewsMap.get(entry.id),
+      wordsEntry: wordsMap.get(entry.id),
+    },
+  }));
+}
+
+const { contentEntry, dailyNewsEntry, wordsEntry } = Astro.props;
+
+// Render markdown to HTML
+const { Content: OriginalContent } = await render(contentEntry);
+const { Content: DailyNewsContent } = dailyNewsEntry
+  ? await render(dailyNewsEntry)
+  : { Content: null };
+
+// Parse vocabulary and rewrite raw cross-folder links to absolute site URLs
+const rawVocab = wordsEntry
+  ? parseWordsFile(wordsEntry.body ?? '')
+  : { b2: [], keyExpressions: [] };
+
+const vocabData = {
+  b2: rawVocab.b2.map((entry) => ({
+    ...entry,
+    bodyQuote: { ...entry.bodyQuote, link: rewriteLink(entry.bodyQuote.link) },
+  })),
+  keyExpressions: rawVocab.keyExpressions.map((entry) => ({
+    ...entry,
+    link: rewriteLink(entry.link),
+  })),
+};
+
+// Extract metadata
+const meta = extractMeta(contentEntry.body ?? '');
+const title = meta.title || contentEntry.id;
+
+// Determine active tab from URL (default: original)
+const url = Astro.url;
+const activeTab = url.searchParams.get('tab') ?? 'original';
+---
+<BaseLayout title={title} description={`${title} — MyEngoo 학습 아카이브`}>
+  <!-- Article header -->
+  <div class="mb-6">
+    <h1 class="text-2xl font-bold mb-2" style="color: var(--fg);">{title}</h1>
+    <div class="flex items-center gap-4 text-sm" style="color: var(--muted);">
+      {meta.date && <span>{meta.date}</span>}
+      {meta.sourceUrl && (
+        <a
+          href={meta.sourceUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          style="color: var(--muted);"
+        >
+          원문 보기 ↗
+        </a>
+      )}
+    </div>
+  </div>
+
+  <!-- Tab navigation -->
+  <div
+    role="tablist"
+    aria-label="기사 보기 방식"
+    class="flex gap-1 mb-6 border-b"
+    style="border-color: var(--border);"
+  >
+    {[
+      { id: 'original', label: '원문' },
+      { id: 'daily-news', label: '직독직해' },
+      { id: 'words', label: '단어장' },
+    ].map(({ id, label }) => (
+      <a
+        href={`?tab=${id}`}
+        role="tab"
+        data-tab={id}
+        aria-selected={activeTab === id ? 'true' : 'false'}
+        class="px-4 py-2 text-sm font-medium rounded-t-lg transition-colors"
+        style={
+          activeTab === id
+            ? 'color: var(--fg); border-bottom: 2px solid var(--fg);'
+            : 'color: var(--muted);'
+        }
+      >
+        {label}
+      </a>
+    ))}
+  </div>
+
+  <!-- Tab panels -->
+  <!-- Original content -->
+  <div
+    role="tabpanel"
+    data-tab="original"
+    data-pagefind-body
+    style={activeTab !== 'original' ? 'display: none;' : ''}
+  >
+    <div class="prose max-w-none">
+      <OriginalContent />
+    </div>
+  </div>
+
+  <!-- Daily news (직독직해) -->
+  <div
+    role="tabpanel"
+    data-tab="daily-news"
+    style={activeTab !== 'daily-news' ? 'display: none;' : ''}
+  >
+    {DailyNewsContent ? (
+      <div class="prose max-w-none">
+        <DailyNewsContent />
+      </div>
+    ) : (
+      <EmptyState message="직독직해가 아직 준비되지 않았어요" />
+    )}
+  </div>
+
+  <!-- Words (단어장) -->
+  <div
+    role="tabpanel"
+    data-tab="words"
+    style={activeTab !== 'words' ? 'display: none;' : ''}
+  >
+    {vocabData.b2.length === 0 && vocabData.keyExpressions.length === 0 ? (
+      <EmptyState message="이 기사의 단어장이 아직 없어요" />
+    ) : (
+      <div>
+        {vocabData.b2.length > 0 && (
+          <section class="mb-8">
+            <h2 class="text-lg font-semibold mb-4" style="color: var(--fg);">📚 B2+ 단어장</h2>
+            {vocabData.b2.map((entry) => (
+              <B2WordCard entry={entry} />
+            ))}
+          </section>
+        )}
+        {vocabData.keyExpressions.length > 0 && (
+          <section>
+            <h2 class="text-lg font-semibold mb-4" style="color: var(--fg);">💡 핵심 표현</h2>
+            {vocabData.keyExpressions.map((entry) => (
+              <KeyExpressionCard entry={entry} />
+            ))}
+          </section>
+        )}
+      </div>
+    )}
+  </div>
+</BaseLayout>
+
+<!-- Client-side tab switching (URL-driven) -->
+<script>
+  function initTabs() {
+    const params = new URLSearchParams(window.location.search);
+    const activeTab = params.get('tab') ?? 'original';
+
+    // Show/hide panels
+    document.querySelectorAll('[role="tabpanel"]').forEach((panel) => {
+      const el = panel as HTMLElement;
+      el.style.display = el.dataset.tab === activeTab ? '' : 'none';
+    });
+
+    // Update tab aria-selected
+    document.querySelectorAll('[role="tab"]').forEach((tab) => {
+      const el = tab as HTMLElement;
+      const isActive = el.dataset.tab === activeTab;
+      el.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      if (isActive) {
+        el.style.color = 'var(--fg)';
+        el.style.borderBottom = '2px solid var(--fg)';
+      } else {
+        el.style.color = 'var(--muted)';
+        el.style.borderBottom = '';
+      }
+    });
+
+    // Handle hash scroll after tab switch
+    if (window.location.hash) {
+      const target = document.querySelector(window.location.hash);
+      if (target) {
+        setTimeout(() => target.scrollIntoView({ behavior: 'smooth' }), 100);
+      }
+    }
+  }
+
+  // Tab click: update URL without full reload
+  document.querySelectorAll('[role="tab"]').forEach((tab) => {
+    tab.addEventListener('click', (e) => {
+      e.preventDefault();
+      const el = e.currentTarget as HTMLElement;
+      const tabId = el.dataset.tab ?? 'original';
+      const url = new URL(window.location.href);
+      url.searchParams.set('tab', tabId);
+      window.history.pushState({}, '', url.toString());
+      initTabs();
+    });
+  });
+
+  // Handle browser back/forward
+  window.addEventListener('popstate', initTabs);
+
+  // Initial run
+  initTabs();
+</script>
