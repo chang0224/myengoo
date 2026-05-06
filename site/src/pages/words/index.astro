@@ -1,0 +1,260 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import EmptyState from '../../components/EmptyState.astro';
+import { loadStudyItems } from '../../lib/aggregator';
+
+const { words, expressions, articleMetaBySlug } = await loadStudyItems();
+
+const partsOfSpeech = Array.from(new Set(words.map((w) => w.pos))).sort();
+const articles = Array.from(articleMetaBySlug.values())
+	.filter((m) => m.date)
+	.sort((a, b) => b.date.localeCompare(a.date));
+
+const totalCount = words.length + expressions.length;
+---
+<BaseLayout title="통합 단어장" description="모든 기사의 B2+ 단어와 핵심 표현을 한자리에서 학습">
+	<div class="mb-6">
+		<h1 class="text-2xl font-bold mb-2" style="color: var(--fg);">통합 단어장</h1>
+		<p class="text-sm" style="color: var(--muted);">
+			총 <span data-stat-total>{totalCount}</span>개 ·
+			단어 <span data-stat-words>{words.length}</span> ·
+			표현 <span data-stat-expressions>{expressions.length}</span>
+		</p>
+	</div>
+
+	<div data-pagefind-ignore class="space-y-4 mb-6">
+		<input
+			type="search"
+			id="vocab-search"
+			placeholder="단어 · 뜻 · 예문 검색…"
+			class="w-full px-4 py-3 rounded-lg text-base"
+			style="background-color: var(--card-bg); color: var(--fg); border: 1px solid var(--border); min-height: 44px;"
+			aria-label="단어장 검색"
+		/>
+
+		<div class="flex flex-wrap gap-3">
+			<label class="flex items-center gap-2 text-sm" style="color: var(--fg);">
+				<span style="color: var(--muted);">유형</span>
+				<select
+					id="vocab-type"
+					class="px-3 py-2 rounded-lg"
+					style="background-color: var(--card-bg); color: var(--fg); border: 1px solid var(--border); min-height: 44px;"
+				>
+					<option value="">전체</option>
+					<option value="word">단어</option>
+					<option value="expression">핵심 표현</option>
+				</select>
+			</label>
+
+			<label class="flex items-center gap-2 text-sm" style="color: var(--fg);">
+				<span style="color: var(--muted);">품사</span>
+				<select
+					id="vocab-pos"
+					class="px-3 py-2 rounded-lg"
+					style="background-color: var(--card-bg); color: var(--fg); border: 1px solid var(--border); min-height: 44px;"
+				>
+					<option value="">전체</option>
+					{partsOfSpeech.map((pos) => <option value={pos}>{pos}</option>)}
+				</select>
+			</label>
+
+			<label class="flex items-center gap-2 text-sm" style="color: var(--fg);">
+				<span style="color: var(--muted);">기사</span>
+				<select
+					id="vocab-article"
+					class="px-3 py-2 rounded-lg"
+					style="background-color: var(--card-bg); color: var(--fg); border: 1px solid var(--border); min-height: 44px;"
+				>
+					<option value="">전체</option>
+					{articles.map((a) => <option value={a.slug}>{a.date} · {a.title}</option>)}
+				</select>
+			</label>
+		</div>
+
+		<p id="vocab-empty" class="text-sm hidden" style="color: var(--muted);">
+			검색 조건에 맞는 항목이 없어요.
+		</p>
+	</div>
+
+	{totalCount === 0 ? (
+		<EmptyState message="단어장이 비어있어요" />
+	) : (
+		<div data-pagefind-ignore>
+			{words.length > 0 && (
+				<section class="mb-8" data-section="words">
+					<h2 class="text-lg font-semibold mb-4" style="color: var(--fg);">
+						📚 B2+ 단어 <span class="text-sm font-normal" style="color: var(--muted);">({words.length})</span>
+					</h2>
+					<div class="space-y-3">
+						{words.map((entry) => {
+							const articleSlugs = entry.sources.map((s) => s.articleSlug).join(',');
+							const searchHaystack = [
+								entry.word,
+								entry.ipa,
+								entry.pos,
+								entry.definitionKo,
+								entry.exampleEn,
+								...entry.sources.map((s) => s.bodyQuote),
+							]
+								.join(' ')
+								.toLowerCase();
+							return (
+								<article
+									data-vocab-entry
+									data-type="word"
+									data-pos={entry.pos}
+									data-articles={articleSlugs}
+									data-search={searchHaystack}
+									class="rounded-lg p-4"
+									style="background-color: var(--card-bg); border: 1px solid var(--border);"
+								>
+									<div class="flex flex-wrap items-baseline gap-2 mb-2">
+										<strong class="text-lg" style="color: var(--fg);">{entry.word}</strong>
+										<span class="font-mono text-sm" style="color: var(--muted);">/{entry.ipa}/</span>
+										<span
+											class="text-xs px-2 py-0.5 rounded"
+											style="background-color: var(--border); color: var(--fg);"
+										>{entry.pos}</span>
+										<span style="color: var(--fg);">{entry.definitionKo}</span>
+									</div>
+
+									{entry.sources.map((source) => (
+										<blockquote
+											class="border-l-2 pl-3 my-2 text-sm italic"
+											style="border-color: var(--border); color: var(--muted);"
+										>
+											<a
+												href={source.link}
+												class="font-medium not-italic mr-1"
+												style="color: var(--muted);"
+											>[{source.articleTitle} · {source.paraRef}]</a>
+											<span set:html={`"${source.bodyQuote}"`}></span>
+										</blockquote>
+									))}
+
+									{entry.exampleEn && (
+										<p class="text-sm mt-2" style="color: var(--muted);">
+											<span class="font-medium">예문:</span> {entry.exampleEn}
+										</p>
+									)}
+								</article>
+							);
+						})}
+					</div>
+				</section>
+			)}
+
+			{expressions.length > 0 && (
+				<section data-section="expressions">
+					<h2 class="text-lg font-semibold mb-4" style="color: var(--fg);">
+						💡 핵심 표현 <span class="text-sm font-normal" style="color: var(--muted);">({expressions.length})</span>
+					</h2>
+					<div class="space-y-3">
+						{expressions.map((entry) => {
+							const articleSlugs = entry.sources.map((s) => s.articleSlug).join(',');
+							const searchHaystack = [
+								entry.expression,
+								entry.definitionKo,
+								entry.usageNoteKo ?? '',
+								...entry.sources.map((s) => s.bodyQuote),
+							]
+								.join(' ')
+								.toLowerCase();
+							return (
+								<article
+									data-vocab-entry
+									data-type="expression"
+									data-pos=""
+									data-articles={articleSlugs}
+									data-search={searchHaystack}
+									class="rounded-lg p-4"
+									style="background-color: var(--card-bg); border: 1px solid var(--border);"
+								>
+									<div class="flex flex-wrap items-baseline gap-2 mb-2">
+										<strong class="text-lg" style="color: var(--fg);">{entry.expression}</strong>
+										<span style="color: var(--fg);">— {entry.definitionKo}</span>
+									</div>
+
+									{entry.sources.map((source) => (
+										<div class="my-2">
+											<a
+												href={source.link}
+												class="text-sm font-medium"
+												style="color: var(--muted);"
+											>[{source.articleTitle} · {source.paraRef}]</a>
+											{source.bodyQuote && (
+												<blockquote
+													class="border-l-2 pl-3 mt-1 text-sm italic"
+													style="border-color: var(--border); color: var(--muted);"
+												>
+													<span set:html={`"${source.bodyQuote}"`}></span>
+												</blockquote>
+											)}
+										</div>
+									))}
+
+									{entry.usageNoteKo && (
+										<p class="text-sm mt-2" style="color: var(--muted);">{entry.usageNoteKo}</p>
+									)}
+								</article>
+							);
+						})}
+					</div>
+				</section>
+			)}
+		</div>
+	)}
+</BaseLayout>
+
+<script>
+	const searchInput = document.getElementById('vocab-search') as HTMLInputElement | null;
+	const typeSelect = document.getElementById('vocab-type') as HTMLSelectElement | null;
+	const posSelect = document.getElementById('vocab-pos') as HTMLSelectElement | null;
+	const articleSelect = document.getElementById('vocab-article') as HTMLSelectElement | null;
+	const emptyMsg = document.getElementById('vocab-empty');
+	const entries = Array.from(document.querySelectorAll<HTMLElement>('[data-vocab-entry]'));
+	const sections = Array.from(document.querySelectorAll<HTMLElement>('[data-section]'));
+
+	function applyFilters() {
+		const search = (searchInput?.value ?? '').trim().toLowerCase();
+		const type = typeSelect?.value ?? '';
+		const pos = posSelect?.value ?? '';
+		const article = articleSelect?.value ?? '';
+
+		let visibleCount = 0;
+		const visiblePerType: Record<string, number> = { word: 0, expression: 0 };
+
+		for (const entry of entries) {
+			const entryType = entry.dataset.type ?? '';
+			const entryPos = entry.dataset.pos ?? '';
+			const entryArticles = (entry.dataset.articles ?? '').split(',').filter(Boolean);
+			const entrySearch = entry.dataset.search ?? '';
+
+			const matchesSearch = !search || entrySearch.includes(search);
+			const matchesType = !type || entryType === type;
+			const matchesPos = !pos || entryPos === pos;
+			const matchesArticle = !article || entryArticles.includes(article);
+
+			const visible = matchesSearch && matchesType && matchesPos && matchesArticle;
+			entry.style.display = visible ? '' : 'none';
+			if (visible) {
+				visibleCount += 1;
+				visiblePerType[entryType] = (visiblePerType[entryType] ?? 0) + 1;
+			}
+		}
+
+		for (const section of sections) {
+			const sectionType = section.dataset.section ?? '';
+			const sectionTypeKey = sectionType === 'words' ? 'word' : 'expression';
+			const hasVisible = (visiblePerType[sectionTypeKey] ?? 0) > 0;
+			section.style.display = hasVisible ? '' : 'none';
+		}
+
+		emptyMsg?.classList.toggle('hidden', visibleCount > 0);
+	}
+
+	searchInput?.addEventListener('input', applyFilters);
+	typeSelect?.addEventListener('change', applyFilters);
+	posSelect?.addEventListener('change', applyFilters);
+	articleSelect?.addEventListener('change', applyFilters);
+</script>
