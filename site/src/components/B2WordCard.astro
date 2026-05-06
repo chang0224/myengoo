@@ -1,0 +1,42 @@
+---
+import type { B2WordEntry } from '../types/vocabulary';
+
+interface Props {
+  entry: B2WordEntry;
+}
+
+const { entry } = Astro.props;
+const { word, ipa, pos, definitionKo, bodyQuote, exampleEn } = entry;
+---
+<div
+  data-testid="b2-word-entry"
+  id={word.toLowerCase().replace(/\s+/g, '-')}
+  class="rounded-lg p-4 mb-4"
+  style="background-color: var(--card-bg); border: 1px solid var(--border);"
+>
+  <div class="flex flex-wrap items-baseline gap-2 mb-2">
+    <strong class="text-lg">{word}</strong>
+    <span class="font-mono text-sm" style="color: var(--muted);">{ipa}</span>
+    <span
+      class="text-xs px-2 py-0.5 rounded"
+      style="background-color: var(--border); color: var(--fg);"
+    >{pos}</span>
+    <span>{definitionKo}</span>
+  </div>
+
+  {bodyQuote && (
+    <blockquote
+      class="border-l-2 pl-3 my-2 text-sm italic"
+      style="border-color: var(--border); color: var(--muted);"
+    >
+      <a href={bodyQuote.link} class="font-medium not-italic mr-1">[{bodyQuote.paraRef}]</a>
+      "{bodyQuote.text}"
+    </blockquote>
+  )}
+
+  {exampleEn && (
+    <p class="text-sm mt-2" style="color: var(--muted);">
+      <span class="font-medium">예문:</span> {exampleEn}
+    </p>
+  )}
+</div>

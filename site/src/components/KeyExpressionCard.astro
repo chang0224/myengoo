@@ -1,0 +1,35 @@
+---
+import type { KeyExpressionEntry } from '../types/vocabulary';
+
+interface Props {
+  entry: KeyExpressionEntry;
+}
+
+const { entry } = Astro.props;
+const { expression, paraRef, link, definitionKo, bodyQuoteText, usageNoteKo } = entry;
+---
+<div
+  data-testid="key-expression-entry"
+  id={expression.toLowerCase().replace(/\s+/g, '-')}
+  class="rounded-lg p-4 mb-4"
+  style="background-color: var(--card-bg); border: 1px solid var(--border);"
+>
+  <div class="flex flex-wrap items-baseline gap-2 mb-2">
+    <strong class="text-lg">{expression}</strong>
+    <a href={link} class="text-sm" style="color: var(--muted);">[{paraRef}]</a>
+    <span>— {definitionKo}</span>
+  </div>
+
+  {bodyQuoteText && (
+    <blockquote
+      class="border-l-2 pl-3 my-2 text-sm italic"
+      style="border-color: var(--border); color: var(--muted);"
+    >
+      "{bodyQuoteText}"
+    </blockquote>
+  )}
+
+  {usageNoteKo && (
+    <p class="text-sm mt-1" style="color: var(--muted);">{usageNoteKo}</p>
+  )}
+</div>
