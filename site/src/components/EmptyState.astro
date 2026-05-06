@@ -4,6 +4,7 @@ interface Props {
   hint?: string;
 }
 
+// biome-ignore lint/correctness/noUnusedVariables: used in Astro template markup
 const { message, hint } = Astro.props;
 ---
 <div data-testid="empty-state" class="flex flex-col items-center justify-center py-16 text-center">
