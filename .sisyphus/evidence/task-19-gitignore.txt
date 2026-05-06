@@ -1,7 +1,0 @@
-Verification count:
-3
-
-Git diff additions:
-+site/dist/
-+site/node_modules/
-+site/.astro/
