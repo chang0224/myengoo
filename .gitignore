@@ -7,3 +7,7 @@
 .claude/skills/engoo-study/*.png
 app/node_modules/
 app/dist/
+
+site/dist/
+site/node_modules/
+site/.astro/
