@@ -1,12 +1,55 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+import { extractMeta } from '../lib/content/extract-meta';
 
-const contents = await getCollection('contents');
-const dailyNews = await getCollection('dailyNews');
-const words = await getCollection('words');
+// Load all 3 collections
+const contentsEntries = await getCollection('contents');
+const wordsEntries = await getCollection('words');
+
+// Build a word count map: slug → count
+const wordCountMap = new Map<string, number>();
+for (const entry of wordsEntries) {
+  const body = entry.body ?? '';
+  // Count B2+ entries by counting bold word patterns
+  const matches = body.match(/^\*\*[^*]+\*\*\s+\/[^/]+\//gm);
+  wordCountMap.set(entry.id, matches?.length ?? 0);
+}
+
+// Extract metadata and sort by date DESC
+const articles = contentsEntries
+  .map((entry) => {
+    const meta = extractMeta(entry.body ?? '');
+    return {
+      slug: entry.id,
+      title: meta.title || entry.id,
+      date: meta.date,
+      wordCount: wordCountMap.get(entry.id) ?? 0,
+    };
+  })
+  .sort((a, b) => {
+    if (!a.date && !b.date) return a.slug.localeCompare(b.slug);
+    if (!a.date) return 1;
+    if (!b.date) return -1;
+    return b.date.localeCompare(a.date);
+  });
 ---
-
-<BaseLayout>
-  <p>{contents.length} articles | {dailyNews.length} daily-news | {words.length} words</p>
+<BaseLayout title="MyEngoo" description="Engoo 기사로 영어 공부하는 학습 아카이브">
+  <div class="max-w-2xl mx-auto">
+    <h1 class="text-2xl font-bold mb-6" style="color: var(--fg);">
+      기사 목록
+      <span class="text-base font-normal ml-2" style="color: var(--muted);">
+        {articles.length}개
+      </span>
+    </h1>
+    {articles.map((article) => (
+      <ArticleCard
+        slug={article.slug}
+        title={article.title}
+        date={article.date}
+        wordCount={article.wordCount}
+      />
+    ))}
+  </div>
 </BaseLayout>
