@@ -2,9 +2,16 @@
 import ThemeToggle from './ThemeToggle.astro';
 
 const base = import.meta.env.BASE_URL;
+const currentPath = Astro.url.pathname;
+
+const navItems = [
+  { href: base, label: '기사', match: (p: string) => p === base || p === `${base.replace(/\/$/, '')}/` || p.startsWith(`${base}articles/`) },
+  { href: `${base}words/`, label: '단어장', match: (p: string) => p.startsWith(`${base}words`) },
+  { href: `${base}study/`, label: '학습', match: (p: string) => p.startsWith(`${base}study`) },
+];
 ---
 <header
-  class="sticky top-0 z-50 px-4 py-3 flex items-center gap-4"
+  class="sticky top-0 z-50 px-4 py-3 flex items-center gap-3 flex-wrap"
   style="background-color: var(--bg); border-bottom: 1px solid var(--border);"
 >
   <a
@@ -16,7 +23,25 @@ const base = import.meta.env.BASE_URL;
     <span class="text-xs" style="color: var(--muted);">학습 아카이브</span>
   </a>
 
-  <div class="flex-1">
+  <nav class="flex items-center gap-1 flex-shrink-0" aria-label="주 메뉴">
+    {navItems.map((item) => {
+      const isActive = item.match(currentPath);
+      return (
+        <a
+          href={item.href}
+          class="px-3 py-2 rounded-md text-sm font-medium transition-colors"
+          style={isActive
+            ? 'color: var(--fg); background-color: var(--card-bg); min-height: 44px; display: inline-flex; align-items: center;'
+            : 'color: var(--muted); min-height: 44px; display: inline-flex; align-items: center;'}
+          aria-current={isActive ? 'page' : undefined}
+        >
+          {item.label}
+        </a>
+      );
+    })}
+  </nav>
+
+  <div class="flex-1 min-w-[120px]">
     <slot name="search" />
   </div>
 

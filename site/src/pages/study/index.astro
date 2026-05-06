@@ -1,0 +1,115 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import EmptyState from '../../components/EmptyState.astro';
+import { loadStudyItems } from '../../lib/aggregator';
+
+const { words, expressions, allItems } = await loadStudyItems();
+const base = import.meta.env.BASE_URL;
+const totalCount = allItems.length;
+
+const modes = [
+	{
+		emoji: '📇',
+		title: '플래시카드',
+		description: '카드를 뒤집으며 단어와 뜻을 빠르게 점검합니다.',
+		href: `${base}study/flashcards/`,
+		eligible: totalCount > 0,
+		hint: '단축키: Space, ←/→, S',
+	},
+	{
+		emoji: '🎯',
+		title: '4지선다 퀴즈',
+		description: '영↔한 방향으로 출제되는 객관식 문제를 풉니다.',
+		href: `${base}study/quiz/`,
+		eligible: words.length >= 4 || expressions.length >= 4,
+		hint: words.length < 4 && expressions.length < 4 ? '항목이 4개 이상 필요해요' : '단축키: 1-4, Enter',
+	},
+	{
+		emoji: '🧠',
+		title: '복습 (SRS)',
+		description: 'SM-2 알고리즘으로 만기가 된 카드를 복습합니다.',
+		href: `${base}study/review/`,
+		eligible: totalCount > 0,
+		hint: '오늘 복습할 카드: ',
+		showDueCount: true,
+	},
+];
+---
+<BaseLayout title="학습" description="플래시카드, 4지선다 퀴즈, SRS 복습으로 단어를 외워보세요">
+	<div class="mb-6">
+		<h1 class="text-2xl font-bold mb-2" style="color: var(--fg);">학습 모드</h1>
+		<p class="text-sm" style="color: var(--muted);">
+			총 <strong style="color: var(--fg);">{totalCount}</strong>개 항목
+			(단어 {words.length} · 표현 {expressions.length})
+		</p>
+	</div>
+
+	{totalCount === 0 ? (
+		<EmptyState message="학습할 항목이 없어요" hint="기사를 추가하면 단어가 자동으로 모입니다" />
+	) : (
+		<div data-pagefind-ignore class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+			{modes.map((mode) => (
+				<a
+					href={mode.eligible ? mode.href : undefined}
+					class="block rounded-lg p-5 transition-transform hover:scale-[1.02]"
+					style={mode.eligible
+						? 'background-color: var(--card-bg); border: 1px solid var(--border); cursor: pointer; min-height: 140px;'
+						: 'background-color: var(--card-bg); border: 1px solid var(--border); opacity: 0.5; cursor: not-allowed; min-height: 140px;'}
+					aria-disabled={!mode.eligible ? 'true' : undefined}
+				>
+					<div class="text-3xl mb-2">{mode.emoji}</div>
+					<h2 class="text-lg font-semibold mb-1" style="color: var(--fg);">{mode.title}</h2>
+					<p class="text-sm mb-3" style="color: var(--muted);">{mode.description}</p>
+					<p class="text-xs" style="color: var(--muted);">
+						{mode.hint}
+						{mode.showDueCount && (
+							<span data-srs-due-count style="color: var(--fg); font-weight: 600;">…</span>
+						)}
+					</p>
+				</a>
+			))}
+		</div>
+	)}
+
+	<section class="mt-10 p-4 rounded-lg" style="background-color: var(--card-bg); border: 1px solid var(--border);">
+		<h2 class="font-semibold mb-2" style="color: var(--fg);">진도 안내</h2>
+		<ul class="text-sm space-y-1" style="color: var(--muted);">
+			<li>• 학습 진도는 이 브라우저의 localStorage에 저장됩니다 (디바이스 간 동기화 없음).</li>
+			<li>• 시크릿 모드 / 캐시 삭제 시 진도가 초기화됩니다.</li>
+			<li>• 다음 복습 시기는 SM-2 알고리즘으로 계산되며 한국 시간 기준입니다.</li>
+		</ul>
+	</section>
+</BaseLayout>
+
+<script>
+	const STORAGE_KEY = 'myengoo:srs:v1';
+
+	function getLocalISO(): string {
+		const date = new Date();
+		const y = date.getFullYear();
+		const m = String(date.getMonth() + 1).padStart(2, '0');
+		const d = String(date.getDate()).padStart(2, '0');
+		return `${y}-${m}-${d}`;
+	}
+
+	function countDueRecords(): number {
+		try {
+			const raw = localStorage.getItem(STORAGE_KEY);
+			if (!raw) return 0;
+			const records = JSON.parse(raw);
+			if (!Array.isArray(records)) return 0;
+			const today = getLocalISO();
+			return records.filter(
+				(r) => r && typeof r.nextReviewDate === 'string' && r.nextReviewDate <= today
+			).length;
+		} catch {
+			return 0;
+		}
+	}
+
+	const target = document.querySelector<HTMLElement>('[data-srs-due-count]');
+	if (target) {
+		const count = countDueRecords();
+		target.textContent = `${count}개`;
+	}
+</script>
