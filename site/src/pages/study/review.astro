@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import EmptyState from '../../components/EmptyState.astro';
+import Review from '../../components/study/Review';
+import { loadStudyItems } from '../../lib/aggregator';
+
+const { allItems } = await loadStudyItems();
+const base = import.meta.env.BASE_URL;
+---
+<BaseLayout title="복습 (SRS)" description="간격 반복 학습 알고리즘으로 단어를 효과적으로 복습합니다">
+	<div class="mb-6 flex items-center justify-between">
+		<div>
+			<h1 class="text-2xl font-bold" style="color: var(--fg);">🧠 복습 (SRS)</h1>
+			<p class="text-sm mt-1" style="color: var(--muted);">SM-2 알고리즘 · 단축키: Space=답 보기, 1-4=평가</p>
+		</div>
+		<a
+			href={`${base}study/`}
+			class="text-sm px-3 py-2 rounded-lg"
+			style="color: var(--muted); border: 1px solid var(--border); min-height: 44px; display: inline-flex; align-items: center;"
+		>
+			← 학습 메뉴
+		</a>
+	</div>
+
+	<div data-pagefind-ignore>
+		{allItems.length === 0 ? (
+			<EmptyState message="복습할 항목이 없어요" />
+		) : (
+			<Review allItems={allItems} client:idle />
+		)}
+	</div>
+</BaseLayout>
