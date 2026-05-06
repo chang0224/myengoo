@@ -6,18 +6,20 @@ const base = import.meta.env.BASE_URL;
 
 <link rel="stylesheet" href={`${base}pagefind/pagefind-ui.css`} />
 <script define:vars={{ base }}>
-  async function initSearch() {
-    const { PagefindUI } = await import(`${base}pagefind/pagefind-ui.js`);
-    new PagefindUI({
-      element: '#pagefind-search',
-      showImages: false,
-      bundlePath: `${base}pagefind/`,
-      resetStyles: false,
-    });
+  // pagefind-ui.js sets window.PagefindUI (not a named export)
+  function initSearch() {
+    if (typeof window.PagefindUI !== 'undefined') {
+      new window.PagefindUI({
+        element: '#pagefind-search',
+        showImages: false,
+        bundlePath: `${base}pagefind/`,
+        resetStyles: false,
+      });
+    }
   }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initSearch);
-  } else {
-    initSearch();
-  }
+
+  const script = document.createElement('script');
+  script.src = `${base}pagefind/pagefind-ui.js`;
+  script.onload = initSearch;
+  document.head.appendChild(script);
 </script>

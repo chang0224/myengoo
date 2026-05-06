@@ -24,15 +24,22 @@ const remarkRewriteLinks: Plugin<[], Root> = () => {
   return (tree) => {
     visit(tree, 'link', (node) => {
       const url = node.url;
+
+      // Rewrite cross-folder .md links: ../contents/slug.md#frag → /myengoo/articles/slug/?tab=original#para-N
       const mdLinkMatch = url.match(/^\.\.\/(contents|daily_news|words)\/([^#?]+\.md)(#.*)?$/);
-      if (!mdLinkMatch) return;
+      if (mdLinkMatch) {
+        const [, folder, filename, rawFrag] = mdLinkMatch;
+        const slug = filename.replace(/\.md$/, '');
+        const tab = FOLDER_TO_TAB[folder];
+        const frag = rawFrag ? rewriteAnchor(rawFrag) : '';
+        node.url = `${BASE_URL}articles/${slug}/?tab=${tab}${frag}`;
+        return;
+      }
 
-      const [, folder, filename, rawFrag] = mdLinkMatch;
-      const slug = filename.replace(/\.md$/, '');
-      const tab = FOLDER_TO_TAB[folder];
-      const frag = rawFrag ? rewriteAnchor(rawFrag) : '';
-
-      node.url = `${BASE_URL}articles/${slug}/?tab=${tab}${frag}`;
+      // Rewrite same-page fragment-only links: #¶N → #para-N, #Ex.N → #ex-N
+      if (url.startsWith('#')) {
+        node.url = rewriteAnchor(url);
+      }
     });
   };
 };
