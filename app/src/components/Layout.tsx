@@ -20,13 +20,29 @@ export default function Layout() {
     <div className="flex flex-col min-h-screen bg-white dark:bg-gray-900">
       <header className="sticky top-0 z-10 flex items-center justify-between px-4 py-3 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
         <h1 className="text-lg font-bold text-gray-900 dark:text-white">📚 단어 외우기</h1>
-        <button
-          onClick={toggleDark}
-          aria-label="다크 모드 토글"
-          className="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-        >
-          {settings.darkMode ? '☀️' : '🌙'}
-        </button>
+        <div className="flex items-center gap-1">
+          <button
+            type="button"
+            onClick={toggleDark}
+            aria-label="다크 모드 토글"
+            className="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+          >
+            {settings.darkMode ? '☀️' : '🌙'}
+          </button>
+          <NavLink
+            to="/settings"
+            aria-label="설정"
+            className={({ isActive }) =>
+              `p-2 rounded-lg transition-colors ${
+                isActive
+                  ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30'
+                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+              }`
+            }
+          >
+            ⚙️
+          </NavLink>
+        </div>
       </header>
 
       <main className="flex-1 overflow-y-auto pb-20">

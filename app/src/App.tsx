@@ -10,6 +10,7 @@ import FlashcardPage from './pages/FlashcardPage';
 import QuizPage from './pages/QuizPage';
 import FillBlankPage from './pages/FillBlankPage';
 import ReviewPage from './pages/ReviewPage';
+import SettingsPage from './pages/SettingsPage';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
               <Route path="quiz" element={<QuizPage />} />
               <Route path="fill-blank" element={<FillBlankPage />} />
               <Route path="review" element={<ReviewPage />} />
+              <Route path="settings" element={<SettingsPage />} />
             </Route>
           </Routes>
         </BrowserRouter>
