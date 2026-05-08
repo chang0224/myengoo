@@ -1,6 +1,6 @@
 # Nuclear Power Is Making a Comeback — Here's Why
 
-> 출처: (Engoo Daily News)
+> 출처: [Engoo Daily News](https://engoo.com/app/daily-news/article/nuclear-power-is-making-a-comeback-heres-why/_T5PgD-jEfGBcZMXQg7oZQ)
 > 저장일: 2026-04-27
 > 📖 [직독직해](../daily_news/2026-04-27_nuclear-power-making-comeback.md) · 📚 [단어장](../words/2026-04-27_nuclear-power-making-comeback.md)
 

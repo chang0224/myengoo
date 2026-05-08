@@ -1,6 +1,6 @@
 # Many Workers Still Hesitant to Use AI, Study Says
 
-> 출처: (Engoo Daily News)
+> 출처: [Engoo Daily News](https://engoo.com/app/daily-news/article/many-workers-still-hesitant-to-use-ai-study-says/2hBvXDmfEfGhHh_yJJv99Q)
 > 저장일: 2026-04-25
 > 📖 [직독직해](../daily_news/2026-04-25_workers-hesitant-use-ai.md) · 📚 [단어장](../words/2026-04-25_workers-hesitant-use-ai.md)
 
