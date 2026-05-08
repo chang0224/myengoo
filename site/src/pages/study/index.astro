@@ -36,12 +36,21 @@ const modes = [
 ];
 ---
 <BaseLayout title="학습" description="플래시카드, 4지선다 퀴즈, SRS 복습으로 단어를 외워보세요">
-	<div class="mb-6">
-		<h1 class="text-2xl font-bold mb-2" style="color: var(--fg);">학습 모드</h1>
-		<p class="text-sm" style="color: var(--muted);">
-			총 <strong style="color: var(--fg);">{totalCount}</strong>개 항목
-			(단어 {words.length} · 표현 {expressions.length})
-		</p>
+	<div class="mb-6 flex items-start justify-between gap-3 flex-wrap">
+		<div>
+			<h1 class="text-2xl font-bold mb-2" style="color: var(--fg);">학습 모드</h1>
+			<p class="text-sm" style="color: var(--muted);">
+				총 <strong style="color: var(--fg);">{totalCount}</strong>개 항목
+				(단어 {words.length} · 표현 {expressions.length})
+			</p>
+		</div>
+		<a
+			href={`${base}study/settings/`}
+			class="text-sm px-3 py-2 rounded-lg"
+			style="color: var(--muted); border: 1px solid var(--border); min-height: 44px; display: inline-flex; align-items: center; gap: 0.25rem;"
+		>
+			⚙️ 설정
+		</a>
 	</div>
 
 	{totalCount === 0 ? (
