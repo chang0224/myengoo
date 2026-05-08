@@ -1,8 +1,8 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import type { AppSettings, ParsedVocabularyFile, SRSRating, SRSRecord, StudyItem, VocabularyWord, KeyExpression } from '../types';
+import type { AppSettings, ExcludedRecord, ParsedVocabularyFile, SRSRating, SRSRecord, StudyItem, VocabularyWord, KeyExpression } from '../types';
 import { parseVocabularyFile } from '../lib/parser';
 import { createNewSRSRecord, reviewCard as srsReviewCard, getDueItems, getNewItems, getTodayISO } from '../lib/srs';
-import { loadSRSRecords, saveSRSRecords, loadSettings, saveSettings } from '../lib/storage';
+import { loadSRSRecords, saveSRSRecords, loadSettings, saveSettings, loadExcludedRecords, saveExcludedRecords } from '../lib/storage';
 
 const wordFileModules = import.meta.glob('../../../words/*.md', { query: '?raw', import: 'default' });
 const contentsModules = import.meta.glob('../../../contents/*.md', { query: '?raw', import: 'default' });
@@ -41,10 +41,20 @@ interface SettingsStore {
   updateSettings: (partial: Partial<AppSettings>) => void;
 }
 
+interface ExcludedItemsStore {
+  records: ExcludedRecord[];
+  excludedIds: Set<string>;
+  isExcluded: (itemId: string) => boolean;
+  excludeItem: (itemId: string) => void;
+  restoreItem: (itemId: string) => void;
+  restoreAll: () => void;
+}
+
 interface VocabularyContextValue {
   vocabulary: VocabularyStore;
   srs: SRSStore;
   settings: SettingsStore;
+  excluded: ExcludedItemsStore;
 }
 
 const VocabularyContext = createContext<VocabularyContextValue | null>(null);
@@ -56,6 +66,7 @@ export function VocabularyProvider({ children }: { children: React.ReactNode }) 
   const [dailyNewsFiles, setDailyNewsFiles] = useState<ArticleFile[]>([]);
   const [srsRecords, setSrsRecords] = useState<SRSRecord[]>([]);
   const [appSettings, setAppSettings] = useState<AppSettings>(() => loadSettings());
+  const [excludedRecords, setExcludedRecords] = useState<ExcludedRecord[]>([]);
 
   useEffect(() => {
     async function loadFiles() {
@@ -124,6 +135,7 @@ export function VocabularyProvider({ children }: { children: React.ReactNode }) 
 
   useEffect(() => {
     setSrsRecords(loadSRSRecords());
+    setExcludedRecords(loadExcludedRecords());
   }, []);
 
   useEffect(() => {
@@ -201,8 +213,45 @@ export function VocabularyProvider({ children }: { children: React.ReactNode }) 
     updateSettings,
   }), [appSettings, updateSettings]);
 
+  const excludedIds = useMemo(() => new Set(excludedRecords.map(r => r.itemId)), [excludedRecords]);
+
+  const isExcluded = useCallback((itemId: string) => excludedIds.has(itemId), [excludedIds]);
+
+  const excludeItem = useCallback((itemId: string) => {
+    setExcludedRecords(prev => {
+      if (prev.some(r => r.itemId === itemId)) return prev;
+      const next = [...prev, { itemId, excludedAt: getTodayISO() }];
+      saveExcludedRecords(next);
+      return next;
+    });
+  }, []);
+
+  const restoreItem = useCallback((itemId: string) => {
+    setExcludedRecords(prev => {
+      const next = prev.filter(r => r.itemId !== itemId);
+      saveExcludedRecords(next);
+      return next;
+    });
+  }, []);
+
+  const restoreAll = useCallback(() => {
+    setExcludedRecords(() => {
+      saveExcludedRecords([]);
+      return [];
+    });
+  }, []);
+
+  const excluded: ExcludedItemsStore = useMemo(() => ({
+    records: excludedRecords,
+    excludedIds,
+    isExcluded,
+    excludeItem,
+    restoreItem,
+    restoreAll,
+  }), [excludedRecords, excludedIds, isExcluded, excludeItem, restoreItem, restoreAll]);
+
   return (
-    <VocabularyContext.Provider value={{ vocabulary, srs, settings }}>
+    <VocabularyContext.Provider value={{ vocabulary, srs, settings, excluded }}>
       {children}
     </VocabularyContext.Provider>
   );
@@ -224,4 +273,10 @@ export function useSettings(): SettingsStore {
   const ctx = useContext(VocabularyContext);
   if (!ctx) throw new Error('useSettings must be used within VocabularyProvider');
   return ctx.settings;
+}
+
+export function useExcludedItems(): ExcludedItemsStore {
+  const ctx = useContext(VocabularyContext);
+  if (!ctx) throw new Error('useExcludedItems must be used within VocabularyProvider');
+  return ctx.excluded;
 }

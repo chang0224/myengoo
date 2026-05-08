@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback } from 'react';
-import { useVocabulary } from './useVocabulary';
+import { useVocabulary, useExcludedItems } from './useVocabulary';
+import { generateItemId } from '../lib/parser';
 import type { KeyExpression, StudyItem, VocabularyWord } from '../types';
 
 export interface DateRange {
@@ -16,8 +17,13 @@ export interface StudyScopeState {
   itemCount: { words: number; expressions: number; total: number };
 }
 
+function getItemKey(item: StudyItem): string {
+  return item.type === 'word' ? item.word : item.expression;
+}
+
 export function useStudyScope(): StudyScopeState {
   const { allItems, allWords, allExpressions } = useVocabulary();
+  const { excludedIds } = useExcludedItems();
   const [dateRange, setDateRange] = useState<DateRange | null>(null);
 
   const filterByRange = useCallback(<T extends { sourceDate: string }>(items: T[]): T[] => {
@@ -25,9 +31,23 @@ export function useStudyScope(): StudyScopeState {
     return items.filter(item => item.sourceDate >= dateRange.start && item.sourceDate <= dateRange.end);
   }, [dateRange]);
 
-  const filteredItems = useMemo<StudyItem[]>(() => filterByRange(allItems), [filterByRange, allItems]);
-  const filteredWords = useMemo<VocabularyWord[]>(() => filterByRange(allWords), [filterByRange, allWords]);
-  const filteredExpressions = useMemo<KeyExpression[]>(() => filterByRange(allExpressions), [filterByRange, allExpressions]);
+  const filterExcluded = useCallback(<T extends StudyItem>(items: T[]): T[] => {
+    if (excludedIds.size === 0) return items;
+    return items.filter(item => !excludedIds.has(generateItemId(item.sourceFile, getItemKey(item))));
+  }, [excludedIds]);
+
+  const filteredItems = useMemo<StudyItem[]>(
+    () => filterExcluded(filterByRange(allItems)),
+    [filterByRange, filterExcluded, allItems],
+  );
+  const filteredWords = useMemo<VocabularyWord[]>(
+    () => filterExcluded(filterByRange(allWords)),
+    [filterByRange, filterExcluded, allWords],
+  );
+  const filteredExpressions = useMemo<KeyExpression[]>(
+    () => filterExcluded(filterByRange(allExpressions)),
+    [filterByRange, filterExcluded, allExpressions],
+  );
 
   const itemCount = useMemo(() => ({
     words: filteredWords.length,
