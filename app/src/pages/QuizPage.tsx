@@ -1,12 +1,14 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import StudyScopeSelector from '../components/StudyScopeSelector';
 import { useStudyScope } from '../hooks/useStudyScope';
-import { useVocabulary } from '../hooks/useVocabulary';
+import { useExcludedItems, useVocabulary } from '../hooks/useVocabulary';
 import { generateQuizSession, type QuizDirection, type QuizQuestion } from '../lib/quiz';
+import { generateItemId } from '../lib/parser';
 
 export default function QuizPage() {
   const { dateRange, setDateRange, filteredItems } = useStudyScope();
   const { allItems } = useVocabulary();
+  const { excludeItem } = useExcludedItems();
   const [direction, setDirection] = useState<QuizDirection>('en-to-kr');
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
   const [qIndex, setQIndex] = useState(0);
@@ -26,7 +28,18 @@ export default function QuizPage() {
     setDone(false);
   }, [filteredItems, direction, allItems]);
 
-  useEffect(() => { startSession(); }, [startSession]);
+  const dateRangeKey = dateRange ? `${dateRange.start}_${dateRange.end}` : 'all';
+  const sessionKey = `${dateRangeKey}_${direction}`;
+  const lastSessionKeyRef = useRef<string>('');
+
+  useEffect(() => {
+    const isParamsChanged = lastSessionKeyRef.current !== sessionKey;
+    lastSessionKeyRef.current = sessionKey;
+
+    if (isParamsChanged || (questions.length === 0 && filteredItems.length > 0)) {
+      startSession();
+    }
+  }, [sessionKey, startSession, questions.length, filteredItems.length]);
 
   const current = questions[qIndex];
 
@@ -47,6 +60,26 @@ export default function QuizPage() {
     } else {
       setQIndex(i => i + 1);
       setSelected(null);
+    }
+  }
+
+  function handleKnow() {
+    if (!current || selected !== null) return;
+    const item = current.item;
+    const key = item.type === 'word' ? item.word : item.expression;
+    excludeItem(generateItemId(item.sourceFile, key));
+
+    const next = [...questions];
+    next.splice(qIndex, 1);
+    setQuestions(next);
+    setSelected(null);
+
+    if (qIndex >= next.length) {
+      if (next.length === 0) {
+        setDone(true);
+      } else {
+        setQIndex(next.length - 1);
+      }
     }
   }
 
@@ -99,16 +132,27 @@ export default function QuizPage() {
           <span className="text-sm text-gray-500 dark:text-gray-400">
             {qIndex + 1} / {questions.length} · 정답률 {questions.length > 0 ? Math.round((correct / Math.max(qIndex, 1)) * 100) : 0}%
           </span>
-          <div className="flex rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 text-xs">
-            {(['en-to-kr', 'kr-to-en'] as QuizDirection[]).map(d => (
-              <button
-                key={d}
-                onClick={() => { setDirection(d); }}
-                className={`px-3 py-1.5 transition-colors ${direction === d ? 'bg-indigo-600 text-white' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'}`}
-              >
-                {d === 'en-to-kr' ? '영→한' : '한→영'}
-              </button>
-            ))}
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={handleKnow}
+              disabled={selected !== null}
+              className="text-sm text-emerald-600 dark:text-emerald-400 hover:underline disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              ✓ 알아요
+            </button>
+            <div className="flex rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 text-xs">
+              {(['en-to-kr', 'kr-to-en'] as QuizDirection[]).map(d => (
+                <button
+                  type="button"
+                  key={d}
+                  onClick={() => { setDirection(d); }}
+                  className={`px-3 py-1.5 transition-colors ${direction === d ? 'bg-indigo-600 text-white' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'}`}
+                >
+                  {d === 'en-to-kr' ? '영→한' : '한→영'}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 

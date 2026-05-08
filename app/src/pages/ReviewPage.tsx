@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import StudyScopeSelector from '../components/StudyScopeSelector';
 import { useStudyScope } from '../hooks/useStudyScope';
-import { useSRS, useVocabulary } from '../hooks/useVocabulary';
+import { useExcludedItems, useSRS, useVocabulary } from '../hooks/useVocabulary';
 import { createNewSRSRecord, reviewCard as calcReview, getTodayISO } from '../lib/srs';
 import { generateItemId } from '../lib/parser';
 import type { SRSRating, SRSRecord, StudyItem } from '../types';
@@ -61,6 +61,7 @@ export default function ReviewPage() {
   const { dateRange, setDateRange, filteredItems } = useStudyScope();
   const { allItems } = useVocabulary();
   const { records, reviewCard } = useSRS();
+  const { excludeItem } = useExcludedItems();
   const [queue, setQueue] = useState<StudyItem[]>([]);
   const [qIndex, setQIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
@@ -124,6 +125,12 @@ export default function ReviewPage() {
       setQIndex(i => i + 1);
       setFlipped(false);
     }
+  }
+
+  function handleKnow() {
+    if (!current) return;
+    const key = current.type === 'word' ? current.word : current.expression;
+    excludeItem(generateItemId(current.sourceFile, key));
   }
 
   if (total === 0) {
@@ -191,7 +198,16 @@ export default function ReviewPage() {
       <div className="flex flex-col flex-1 p-4 gap-4">
         <div className="flex items-center justify-between">
           <span className="text-sm text-gray-500 dark:text-gray-400">오늘 복습할 카드: {total}장</span>
-          <span className="text-sm text-gray-500 dark:text-gray-400">{qIndex + 1} / {total}</span>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={handleKnow}
+              className="text-sm text-emerald-600 dark:text-emerald-400 hover:underline"
+            >
+              ✓ 알아요
+            </button>
+            <span className="text-sm text-gray-500 dark:text-gray-400">{qIndex + 1} / {total}</span>
+          </div>
         </div>
 
         <div

@@ -1,6 +1,8 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import StudyScopeSelector from '../components/StudyScopeSelector';
 import { useStudyScope } from '../hooks/useStudyScope';
+import { useExcludedItems } from '../hooks/useVocabulary';
+import { generateItemId } from '../lib/parser';
 import type { KeyExpression, StudyItem, VocabularyWord } from '../types';
 
 function CardFront({ item }: { item: StudyItem }) {
@@ -50,15 +52,24 @@ function CardBack({ item }: { item: StudyItem }) {
 
 export default function FlashcardPage() {
   const { dateRange, setDateRange, filteredItems } = useStudyScope();
+  const { excludeItem } = useExcludedItems();
   const [index, setIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [shuffled, setShuffled] = useState<StudyItem[]>([]);
 
+  const dateRangeKey = dateRange ? `${dateRange.start}_${dateRange.end}` : 'all';
+  const lastDateRangeKeyRef = useRef<string>('');
+
   useEffect(() => {
-    setShuffled([...filteredItems]);
-    setIndex(0);
-    setFlipped(false);
-  }, [filteredItems]);
+    const isDateRangeChanged = lastDateRangeKeyRef.current !== dateRangeKey;
+    lastDateRangeKeyRef.current = dateRangeKey;
+
+    if (isDateRangeChanged || (shuffled.length === 0 && filteredItems.length > 0)) {
+      setShuffled([...filteredItems]);
+      setIndex(0);
+      setFlipped(false);
+    }
+  }, [dateRangeKey, filteredItems, shuffled.length]);
 
   const current = shuffled[index];
   const total = shuffled.length;
@@ -84,6 +95,23 @@ export default function FlashcardPage() {
     setFlipped(false);
   }, [filteredItems]);
 
+  const handleKnow = useCallback(() => {
+    if (!current) return;
+    const key = current.type === 'word' ? current.word : current.expression;
+    excludeItem(generateItemId(current.sourceFile, key));
+
+    const next = [...shuffled];
+    next.splice(index, 1);
+    setShuffled(next);
+
+    if (index >= next.length && next.length > 0) {
+      setIndex(next.length - 1);
+    } else if (next.length === 0) {
+      setIndex(0);
+    }
+    setFlipped(false);
+  }, [current, shuffled, index, excludeItem]);
+
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); setFlipped(f => !f); }
@@ -107,7 +135,22 @@ export default function FlashcardPage() {
         <div className="flex flex-col flex-1 p-4 gap-4">
           <div className="flex items-center justify-between">
             <span className="text-sm text-gray-500 dark:text-gray-400">{index + 1} / {total}</span>
-            <button onClick={handleShuffle} className="text-sm text-indigo-600 dark:text-indigo-400 hover:underline">🔀 섞기</button>
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={handleKnow}
+                className="text-sm text-emerald-600 dark:text-emerald-400 hover:underline"
+              >
+                ✓ 알아요
+              </button>
+              <button
+                type="button"
+                onClick={handleShuffle}
+                className="text-sm text-indigo-600 dark:text-indigo-400 hover:underline"
+              >
+                🔀 섞기
+              </button>
+            </div>
           </div>
 
           <div

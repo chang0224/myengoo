@@ -1,12 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import StudyScopeSelector from '../components/StudyScopeSelector';
 import { useStudyScope } from '../hooks/useStudyScope';
+import { useExcludedItems } from '../hooks/useVocabulary';
+import { generateItemId } from '../lib/parser';
 import { checkAnswer, createFillBlankQuestion, type FillBlankQuestion } from '../lib/fillblank';
 
 type AnswerState = 'idle' | 'correct' | 'wrong';
 
 export default function FillBlankPage() {
   const { dateRange, setDateRange, filteredWords } = useStudyScope();
+  const { excludeItem } = useExcludedItems();
   const [questions, setQuestions] = useState<FillBlankQuestion[]>([]);
   const [qIndex, setQIndex] = useState(0);
   const [input, setInput] = useState('');
@@ -31,7 +34,17 @@ export default function FillBlankPage() {
     setDone(false);
   }, [filteredWords]);
 
-  useEffect(() => { startSession(); }, [startSession]);
+  const dateRangeKey = dateRange ? `${dateRange.start}_${dateRange.end}` : 'all';
+  const lastDateRangeKeyRef = useRef<string>('');
+
+  useEffect(() => {
+    const isDateRangeChanged = lastDateRangeKeyRef.current !== dateRangeKey;
+    lastDateRangeKeyRef.current = dateRangeKey;
+
+    if (isDateRangeChanged || (questions.length === 0 && filteredWords.length > 0)) {
+      startSession();
+    }
+  }, [dateRangeKey, startSession, questions.length, filteredWords.length]);
 
   useEffect(() => {
     if (answerState === 'idle') inputRef.current?.focus();
@@ -59,6 +72,26 @@ export default function FillBlankPage() {
       setInput('');
       setAnswerState('idle');
       setRevealed(false);
+    }
+  }
+
+  function handleKnow() {
+    if (!current) return;
+    excludeItem(generateItemId(current.word.sourceFile, current.word.word));
+
+    const next = [...questions];
+    next.splice(qIndex, 1);
+    setQuestions(next);
+    setInput('');
+    setAnswerState('idle');
+    setRevealed(false);
+
+    if (qIndex >= next.length) {
+      if (next.length === 0) {
+        setDone(true);
+      } else {
+        setQIndex(next.length - 1);
+      }
     }
   }
 
@@ -117,7 +150,17 @@ export default function FillBlankPage() {
       <div className="flex flex-col flex-1 p-4 gap-4">
         <div className="flex items-center justify-between">
           <span className="text-sm text-gray-500 dark:text-gray-400">{qIndex + 1} / {questions.length}</span>
-          <span className="text-xs text-gray-400 dark:text-gray-500">{current.word.partOfSpeech}</span>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={handleKnow}
+              disabled={answerState !== 'idle'}
+              className="text-sm text-emerald-600 dark:text-emerald-400 hover:underline disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              ✓ 알아요
+            </button>
+            <span className="text-xs text-gray-400 dark:text-gray-500">{current.word.partOfSpeech}</span>
+          </div>
         </div>
 
         <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
