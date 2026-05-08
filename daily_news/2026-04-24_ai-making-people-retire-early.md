@@ -1,6 +1,6 @@
 # Is AI Making People Retire Early?
 
-> 출처: (Engoo Daily News)
+> 출처: [Engoo Daily News](https://engoo.com/app/daily-news/article/is-ai-making-people-retire-early/2b1n7DTxEfG7cz_sP1eKDw)
 > 학습일: 2026-04-24
 > 📄 [원문](../contents/2026-04-24_ai-making-people-retire-early.md) · 📚 [단어장](../words/2026-04-24_ai-making-people-retire-early.md)
 

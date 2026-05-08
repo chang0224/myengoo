@@ -1,6 +1,6 @@
 # Microsoft Offers Thousands of Staff Voluntary Retirement
 
-> 출처: Engoo Daily News
+> 출처: [Engoo Daily News](https://engoo.com/app/daily-news/article/microsoft-offers-thousands-of-staff-voluntary-retirement/0N3rVELWEfG9INNaDqzsag)
 > 학습일: 2026-05-06
 > 📄 [원문](../contents/2026-05-06_microsoft-voluntary-retirement.md) · 📚 [단어장](../words/2026-05-06_microsoft-voluntary-retirement.md)
 

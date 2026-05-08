@@ -1,6 +1,6 @@
 # DNA and the Discovery of 'The Secret of Life'
 
-> 출처: https://engoo.com/app/daily-news/article/dna-and-the-discovery-of-the-secret-of-life/IEeAUHwMEe2nJt81f4uBRQ
+> 출처: [Engoo Daily News](https://engoo.com/app/daily-news/article/dna-and-the-discovery-of-the-secret-of-life/IEeAUHwMEe2nJt81f4uBRQ)
 > 학습일: 2026-05-04
 > 📄 [원문](../contents/2026-05-04_dna-discovery-secret-life.md) · 📚 [단어장](../words/2026-05-04_dna-discovery-secret-life.md)
 

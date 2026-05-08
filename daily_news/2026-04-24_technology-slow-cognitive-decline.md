@@ -1,6 +1,6 @@
 # Technology May Slow Cognitive Decline in Older Adults
 
-> 출처: (Engoo Daily News)
+> 출처: [Engoo Daily News](https://engoo.com/app/daily-news/article/technology-may-slow-cognitive-decline-in-older-adults/_0-p2BwCEfCK90eNBz5p0A)
 > 학습일: 2026-04-24
 > 📄 [원문](../contents/2026-04-24_technology-slow-cognitive-decline.md) · 📚 [단어장](../words/2026-04-24_technology-slow-cognitive-decline.md)
 
