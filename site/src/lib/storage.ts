@@ -1,7 +1,9 @@
-import { DEFAULT_SETTINGS, type SRSRecord, type StudySettings } from '../types/study';
+import { getLocalISO } from './dateLocal';
+import { DEFAULT_SETTINGS, type ExcludedRecord, type SRSRecord, type StudySettings } from '../types/study';
 
 const SRS_KEY = 'myengoo:srs:v1';
 const SETTINGS_KEY = 'myengoo:settings:v1';
+const EXCLUDED_KEY = 'myengoo:excluded:v1';
 
 function isBrowser(): boolean {
 	return typeof window !== 'undefined' && typeof localStorage !== 'undefined';
@@ -63,4 +65,46 @@ export function saveSettings(settings: StudySettings): void {
 	} catch (err) {
 		console.warn('Failed to save settings:', err);
 	}
+}
+
+export function loadExcluded(): ExcludedRecord[] {
+	if (!isBrowser()) return [];
+	try {
+		const raw = localStorage.getItem(EXCLUDED_KEY);
+		if (!raw) return [];
+		const parsed = JSON.parse(raw);
+		if (!Array.isArray(parsed)) return [];
+		return parsed as ExcludedRecord[];
+	} catch (err) {
+		console.warn('Failed to load excluded records:', err);
+		return [];
+	}
+}
+
+export function saveExcluded(records: ExcludedRecord[]): void {
+	if (!isBrowser()) return;
+	try {
+		localStorage.setItem(EXCLUDED_KEY, JSON.stringify(records));
+	} catch (err) {
+		console.warn('Failed to save excluded records:', err);
+	}
+}
+
+export function addExcluded(itemId: string): ExcludedRecord[] {
+	const records = loadExcluded();
+	if (records.some((r) => r.itemId === itemId)) return records;
+	const next = [...records, { itemId, excludedAt: getLocalISO() }];
+	saveExcluded(next);
+	return next;
+}
+
+export function removeExcluded(itemId: string): ExcludedRecord[] {
+	const records = loadExcluded();
+	const next = records.filter((r) => r.itemId !== itemId);
+	saveExcluded(next);
+	return next;
+}
+
+export function clearExcluded(): void {
+	saveExcluded([]);
 }

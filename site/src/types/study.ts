@@ -62,3 +62,8 @@ export const DEFAULT_SETTINGS: StudySettings = {
 	quizDirection: 'en-to-kr',
 	lastStudyDate: '',
 };
+
+export interface ExcludedRecord {
+	itemId: string;
+	excludedAt: string;
+}
