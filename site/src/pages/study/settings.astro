@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ExcludedSettings from '../../components/study/ExcludedSettings';
+import { loadStudyItems } from '../../lib/aggregator';
+
+const { allItems } = await loadStudyItems();
+const base = import.meta.env.BASE_URL;
+---
+<BaseLayout title="학습 설정" description="학습에서 제외한 단어를 관리합니다">
+	<div class="mb-6 flex items-center justify-between">
+		<div>
+			<h1 class="text-2xl font-bold" style="color: var(--fg);">⚙️ 학습 설정</h1>
+			<p class="text-sm mt-1" style="color: var(--muted);">학습에서 제외한 단어를 관리합니다.</p>
+		</div>
+		<a
+			href={`${base}study/`}
+			class="text-sm px-3 py-2 rounded-lg"
+			style="color: var(--muted); border: 1px solid var(--border); min-height: 44px; display: inline-flex; align-items: center;"
+		>
+			← 학습 메뉴
+		</a>
+	</div>
+
+	<div data-pagefind-ignore>
+		<ExcludedSettings allItems={allItems} client:idle />
+	</div>
+</BaseLayout>
