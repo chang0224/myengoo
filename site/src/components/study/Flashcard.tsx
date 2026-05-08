@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { addExcluded, loadExcluded } from '../../lib/storage';
 import type { StudyItem } from '../../types/study';
 
 interface Props {
@@ -39,16 +40,31 @@ export default function Flashcard({ items }: Props) {
 	const flip = useCallback(() => setFlipped((f) => !f), []);
 
 	const reshuffle = useCallback(() => {
-		setOrder(shuffle(items));
+		const excludedIds = new Set(loadExcluded().map((r) => r.itemId));
+		setOrder(shuffle(items.filter((item) => !excludedIds.has(item.id))));
 		setIndex(0);
 		setFlipped(false);
 	}, [items]);
 
 	useEffect(() => {
-		setOrder(items);
+		const excludedIds = new Set(loadExcluded().map((r) => r.itemId));
+		setOrder(items.filter((item) => !excludedIds.has(item.id)));
 		setIndex(0);
 		setFlipped(false);
 	}, [items]);
+
+	const handleKnow = useCallback(() => {
+		if (!current) return;
+		addExcluded(current.id);
+		const nextOrder = order.filter((item) => item.id !== current.id);
+		setOrder(nextOrder);
+		if (nextOrder.length === 0) {
+			setIndex(0);
+		} else if (index >= nextOrder.length) {
+			setIndex(nextOrder.length - 1);
+		}
+		setFlipped(false);
+	}, [current, order, index]);
 
 	useEffect(() => {
 		function onKeyDown(e: KeyboardEvent) {
@@ -97,7 +113,17 @@ export default function Flashcard({ items }: Props) {
 		<div className="space-y-4">
 			<div className="flex items-center justify-between text-sm" style={{ color: 'var(--muted)' }}>
 				<span>{index + 1} / {total}</span>
-				<span>{current.type === 'word' ? '단어' : '표현'}</span>
+				<div className="flex items-center gap-3">
+					<button
+						type="button"
+						onClick={handleKnow}
+						className="text-sm hover:underline"
+						style={{ color: '#16a34a', minHeight: '32px', padding: '0 4px' }}
+					>
+						✓ 알아요
+					</button>
+					<span>{current.type === 'word' ? '단어' : '표현'}</span>
+				</div>
 			</div>
 
 			<div style={cardStyle}>

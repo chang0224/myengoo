@@ -4,7 +4,7 @@ import {
 	type QuizDirection,
 	type QuizQuestion,
 } from '../../lib/quiz';
-import { loadSettings, saveSettings } from '../../lib/storage';
+import { addExcluded, loadExcluded, loadSettings, saveSettings } from '../../lib/storage';
 import type { StudyItem } from '../../types/study';
 
 interface Props {
@@ -45,7 +45,9 @@ export default function Quiz({ items }: Props) {
 	}, []);
 
 	const start = useCallback(() => {
-		const session = generateQuizSession(items, direction);
+		const excludedIds = new Set(loadExcluded().map((r) => r.itemId));
+		const eligible = items.filter((item) => !excludedIds.has(item.id));
+		const session = generateQuizSession(eligible, direction);
 		if (session.length === 0) return;
 		setQuestions(session);
 		setIndex(0);
@@ -84,6 +86,21 @@ export default function Quiz({ items }: Props) {
 		setSelected(null);
 		setCorrectCount(0);
 	}, []);
+
+	const handleKnow = useCallback(() => {
+		if (!current || selected !== null) return;
+		addExcluded(current.item.id);
+		const nextQuestions = questions.filter((q) => q.item.id !== current.item.id);
+		setQuestions(nextQuestions);
+		if (nextQuestions.length === 0) {
+			setStatus('finished');
+			return;
+		}
+		if (index >= nextQuestions.length) {
+			setIndex(nextQuestions.length - 1);
+		}
+		setSelected(null);
+	}, [current, selected, questions, index]);
 
 	useEffect(() => {
 		if (status !== 'in-progress') return;
@@ -219,7 +236,24 @@ export default function Quiz({ items }: Props) {
 		<div className="space-y-4">
 			<div className="flex items-center justify-between text-sm" style={{ color: 'var(--muted)' }}>
 				<span>{index + 1} / {questions.length}</span>
-				<span>정답 {correctCount}</span>
+				<div className="flex items-center gap-3">
+					<button
+						type="button"
+						onClick={handleKnow}
+						disabled={selected !== null}
+						className="text-sm hover:underline"
+						style={{
+							color: '#16a34a',
+							minHeight: '32px',
+							padding: '0 4px',
+							opacity: selected !== null ? 0.4 : 1,
+							cursor: selected !== null ? 'not-allowed' : 'pointer',
+						}}
+					>
+						✓ 알아요
+					</button>
+					<span>정답 {correctCount}</span>
+				</div>
 			</div>
 
 			<div

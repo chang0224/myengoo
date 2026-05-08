@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { getLocalISO } from '../../lib/dateLocal';
 import { createNewSRSRecord, getDueRecords, reviewCard } from '../../lib/srs';
-import { loadSRS, upsertSRSRecord } from '../../lib/storage';
+import { addExcluded, loadExcluded, loadSRS, upsertSRSRecord } from '../../lib/storage';
 import {
 	SRS_RATING_AGAIN,
 	SRS_RATING_EASY,
@@ -49,19 +49,21 @@ export default function Review({ allItems, newItemBatchSize = 10 }: Props) {
 
 	useEffect(() => {
 		const records = loadSRS();
+		const excludedIds = new Set(loadExcluded().map((r) => r.itemId));
 		const today = getLocalISO();
 
 		const recordById = new Map(records.map((r) => [r.itemId, r]));
 		const dueRecords = getDueRecords(records, today);
 		const dueQueue: QueueEntry[] = [];
 		for (const record of dueRecords) {
+			if (excludedIds.has(record.itemId)) continue;
 			const item = itemMap.get(record.itemId);
 			if (!item) continue;
 			dueQueue.push({ item, record, isNew: false });
 		}
 
 		const newItems = allItems
-			.filter((item) => !recordById.has(item.id))
+			.filter((item) => !recordById.has(item.id) && !excludedIds.has(item.id))
 			.slice(0, newItemBatchSize);
 
 		const newQueue: QueueEntry[] = newItems.map((item) => ({
@@ -92,6 +94,13 @@ export default function Review({ allItems, newItemBatchSize = 10 }: Props) {
 		},
 		[current]
 	);
+
+	const handleKnow = useCallback(() => {
+		if (!current) return;
+		addExcluded(current.item.id);
+		setQueue((prev) => prev.filter((entry) => entry.item.id !== current.item.id));
+		setFlipped(false);
+	}, [current]);
 
 	useEffect(() => {
 		if (!current) return;
@@ -156,7 +165,17 @@ export default function Review({ allItems, newItemBatchSize = 10 }: Props) {
 		<div className="space-y-4">
 			<div className="flex items-center justify-between text-sm" style={{ color: 'var(--muted)' }}>
 				<span>{index + 1} / {queue.length}</span>
-				<span>{current.isNew ? '신규' : `복습 ${current.record.repetitions + 1}회`}</span>
+				<div className="flex items-center gap-3">
+					<button
+						type="button"
+						onClick={handleKnow}
+						className="text-sm hover:underline"
+						style={{ color: '#16a34a', minHeight: '32px', padding: '0 4px' }}
+					>
+						✓ 알아요
+					</button>
+					<span>{current.isNew ? '신규' : `복습 ${current.record.repetitions + 1}회`}</span>
+				</div>
 			</div>
 
 			<div
