@@ -1,7 +1,8 @@
-import type { AppSettings, SRSRecord } from '../types';
+import type { AppSettings, ExcludedRecord, SRSRecord } from '../types';
 
 const STORAGE_KEY_SRS = 'vocab-quiz-srs';
 const STORAGE_KEY_SETTINGS = 'vocab-quiz-settings';
+const STORAGE_KEY_EXCLUDED = 'vocab-quiz-excluded';
 
 const DEFAULT_SETTINGS: AppSettings = {
   darkMode: false,
@@ -51,5 +52,28 @@ export function loadSettings(): AppSettings {
   } catch (error) {
     console.warn('[storage] Failed to load settings:', error);
     return { ...DEFAULT_SETTINGS };
+  }
+}
+
+export function saveExcludedRecords(records: ExcludedRecord[]): boolean {
+  try {
+    localStorage.setItem(STORAGE_KEY_EXCLUDED, JSON.stringify(records));
+    return true;
+  } catch (error) {
+    console.warn('[storage] Failed to save excluded records:', error);
+    return false;
+  }
+}
+
+export function loadExcludedRecords(): ExcludedRecord[] {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY_EXCLUDED);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw) as unknown;
+    if (!Array.isArray(parsed)) return [];
+    return parsed as ExcludedRecord[];
+  } catch (error) {
+    console.warn('[storage] Failed to load excluded records:', error);
+    return [];
   }
 }

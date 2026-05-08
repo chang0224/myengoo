@@ -39,6 +39,12 @@ export interface SRSRecord {
 // SRS rating from user: Again=0, Hard=2, Good=3, Easy=5
 export type SRSRating = 0 | 2 | 3 | 5;
 
+// Excluded item — user-marked "I know this" words/expressions to skip in study modes
+export interface ExcludedRecord {
+  itemId: string;       // stable ID matching SRS records: `${sourceFile}::${word|expression}`
+  excludedAt: string;   // ISO date string "YYYY-MM-DD"
+}
+
 // Result of parsing one vocabulary markdown file
 export interface ParsedVocabularyFile {
   fileName: string;          // e.g., "2026-04-24_technology-slow-cognitive-decline.md"
