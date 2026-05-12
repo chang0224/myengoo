@@ -1,9 +1,10 @@
 # 📚 Engoo 학습 인덱스
 
-> 총 6개 기사 · 마지막 업데이트: 2026-05-06
+> 총 7개 기사 · 마지막 업데이트: 2026-05-12
 
 | 날짜 | 제목 | 원문 | 통합 | 단어장 | 단어 수 |
 |------|------|------|------|--------|---------|
+| 2026-05-12 | Two UK Pubs a Day Closed in Early 2026 | [원문](contents/2026-05-12_two-uk-pubs-closed-daily.md) | [📖](daily_news/2026-05-12_two-uk-pubs-closed-daily.md) | [📚](words/2026-05-12_two-uk-pubs-closed-daily.md) | 11 |
 | 2026-05-06 | Microsoft Offers Thousands of Staff Voluntary Retirement | [원문](contents/2026-05-06_microsoft-voluntary-retirement.md) | [📖](daily_news/2026-05-06_microsoft-voluntary-retirement.md) | [📚](words/2026-05-06_microsoft-voluntary-retirement.md) | 8 |
 | 2026-05-04 | DNA and the Discovery of 'The Secret of Life' | [원문](contents/2026-05-04_dna-discovery-secret-life.md) | [📖](daily_news/2026-05-04_dna-discovery-secret-life.md) | [📚](words/2026-05-04_dna-discovery-secret-life.md) | 11 |
 | 2026-04-27 | Nuclear Power Is Making a Comeback — Here's Why | [원문](contents/2026-04-27_nuclear-power-making-comeback.md) | [📖](daily_news/2026-04-27_nuclear-power-making-comeback.md) | [📚](words/2026-04-27_nuclear-power-making-comeback.md) | 10 |
