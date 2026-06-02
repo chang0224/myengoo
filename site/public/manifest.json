@@ -1,0 +1,17 @@
+{
+  "name": "MyEngoo",
+  "short_name": "MyEngoo",
+  "description": "Engoo 기사로 영어 공부하는 학습 아카이브",
+  "start_url": "/myengoo/",
+  "scope": "/myengoo/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/myengoo/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
