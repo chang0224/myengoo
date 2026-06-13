@@ -1,9 +1,10 @@
 # 📚 Engoo 학습 인덱스
 
-> 총 9개 기사 · 마지막 업데이트: 2026-06-02
+> 총 10개 기사 · 마지막 업데이트: 2026-06-13
 
 | 날짜 | 제목 | 원문 | 통합 | 단어장 | 단어 수 |
 |------|------|------|------|--------|---------|
+| 2026-06-13 | Remote Work, Not AI, May Be Driving Unemployment | [원문](contents/2026-06-13_remote-work-driving-unemployment.md) | [📖](daily_news/2026-06-13_remote-work-driving-unemployment.md) | [📚](words/2026-06-13_remote-work-driving-unemployment.md) | 8 |
 | 2026-06-02 | Nvidia Now Worth More than Most Countries | [원문](contents/2026-06-02_nvidia-worth-more-than-countries.md) | [📖](daily_news/2026-06-02_nvidia-worth-more-than-countries.md) | [📚](words/2026-06-02_nvidia-worth-more-than-countries.md) | 6 |
 | 2026-05-18 | Overtourism Hits Norway's Northern Islands | [원문](contents/2026-05-18_overtourism-norway-northern-islands.md) | [📖](daily_news/2026-05-18_overtourism-norway-northern-islands.md) | [📚](words/2026-05-18_overtourism-norway-northern-islands.md) | 10 |
 | 2026-05-12 | Two UK Pubs a Day Closed in Early 2026 | [원문](contents/2026-05-12_two-uk-pubs-closed-daily.md) | [📖](daily_news/2026-05-12_two-uk-pubs-closed-daily.md) | [📚](words/2026-05-12_two-uk-pubs-closed-daily.md) | 11 |
