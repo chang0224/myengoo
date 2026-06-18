@@ -1,9 +1,10 @@
 # 📚 Engoo 학습 인덱스
 
-> 총 11개 기사 · 마지막 업데이트: 2026-06-17
+> 총 12개 기사 · 마지막 업데이트: 2026-06-18
 
 | 날짜 | 제목 | 원문 | 통합 | 단어장 | 단어 수 |
 |------|------|------|------|--------|---------|
+| 2026-06-18 | Musk Becomes World's First Trillionaire After SpaceX IPO | [원문](contents/2026-06-18_musk-first-trillionaire-spacex-ipo.md) | [📖](daily_news/2026-06-18_musk-first-trillionaire-spacex-ipo.md) | [📚](words/2026-06-18_musk-first-trillionaire-spacex-ipo.md) | 8 |
 | 2026-06-17 | Airbnb Program Helps Seoul Mothers Return to Work | [원문](contents/2026-06-17_airbnb-helps-seoul-mothers-work.md) | [📖](daily_news/2026-06-17_airbnb-helps-seoul-mothers-work.md) | [📚](words/2026-06-17_airbnb-helps-seoul-mothers-work.md) | 8 |
 | 2026-06-13 | Remote Work, Not AI, May Be Driving Unemployment | [원문](contents/2026-06-13_remote-work-driving-unemployment.md) | [📖](daily_news/2026-06-13_remote-work-driving-unemployment.md) | [📚](words/2026-06-13_remote-work-driving-unemployment.md) | 8 |
 | 2026-06-02 | Nvidia Now Worth More than Most Countries | [원문](contents/2026-06-02_nvidia-worth-more-than-countries.md) | [📖](daily_news/2026-06-02_nvidia-worth-more-than-countries.md) | [📚](words/2026-06-02_nvidia-worth-more-than-countries.md) | 6 |
