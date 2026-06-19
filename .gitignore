@@ -5,6 +5,8 @@
 .claude/settings.local.json
 .claude/skills/engoo-study/.playwright-mcp/
 .claude/skills/engoo-study/*.png
+.agents/skills/engoo-study/.playwright-mcp/
+.agents/skills/engoo-study/*.png
 app/node_modules/
 app/dist/
 
