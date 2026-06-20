@@ -47,8 +47,81 @@ const base = import.meta.env.BASE_URL;
         }
       })();
     </script>
+
+    <!-- Password gate: hide content until authenticated -->
+    <script is:inline>
+      (function () {
+        if (sessionStorage.getItem('authed') !== '1') {
+          document.documentElement.dataset.locked = '1';
+        }
+      })();
+    </script>
+    <style>
+      html[data-locked="1"] body > :not(#pw-gate) { display: none !important; }
+      #pw-gate {
+        position: fixed; inset: 0; z-index: 9999;
+        display: flex; align-items: center; justify-content: center;
+        background: var(--bg, #fff);
+      }
+      html.dark #pw-gate { background: var(--bg, #1a1a1a); }
+      #pw-gate form {
+        display: flex; flex-direction: column; align-items: center; gap: 12px;
+        padding: 32px; border-radius: 12px;
+        border: 1px solid var(--border, #e5e7eb);
+        background: var(--surface, #fff);
+      }
+      html.dark #pw-gate form {
+        border-color: var(--border, #333);
+        background: var(--surface, #222);
+      }
+      #pw-gate input {
+        padding: 8px 12px; border-radius: 6px; text-align: center;
+        border: 1px solid var(--border, #d1d5db);
+        background: var(--bg, #fff); color: var(--fg, #111);
+        font-size: 1rem; width: 160px;
+      }
+      html.dark #pw-gate input {
+        border-color: var(--border, #444);
+        background: var(--bg, #1a1a1a); color: var(--fg, #eee);
+      }
+      #pw-gate button {
+        padding: 8px 24px; border-radius: 6px; border: none; cursor: pointer;
+        background: #2563eb; color: #fff; font-size: 0.95rem; font-weight: 500;
+      }
+      #pw-gate button:hover { background: #1d4ed8; }
+      #pw-gate .error { color: #ef4444; font-size: 0.85rem; min-height: 1.2em; }
+    </style>
   </head>
   <body class="min-h-screen">
+    <div id="pw-gate">
+      <form id="pw-form">
+        <span style="font-size:1.5rem;">🔒</span>
+        <input id="pw-input" type="password" placeholder="Password" autocomplete="off" autofocus />
+        <button type="submit">확인</button>
+        <span class="error" id="pw-error"></span>
+      </form>
+    </div>
+    <script is:inline>
+      (function () {
+        if (sessionStorage.getItem('authed') === '1') {
+          document.getElementById('pw-gate')?.remove();
+          return;
+        }
+        document.getElementById('pw-form').addEventListener('submit', function (e) {
+          e.preventDefault();
+          var val = document.getElementById('pw-input').value;
+          if (val === '0224') {
+            sessionStorage.setItem('authed', '1');
+            delete document.documentElement.dataset.locked;
+            document.getElementById('pw-gate').remove();
+          } else {
+            document.getElementById('pw-error').textContent = '비밀번호가 틀렸습니다';
+            document.getElementById('pw-input').value = '';
+            document.getElementById('pw-input').focus();
+          }
+        });
+      })();
+    </script>
     <SiteHeader>
       <PagefindSearch slot="search" />
     </SiteHeader>
