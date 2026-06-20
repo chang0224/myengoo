@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import ErrorBoundary from './components/ErrorBoundary';
+import PasswordGate from './components/PasswordGate';
 import { VocabularyProvider } from './hooks/useVocabulary';
 import Layout from './components/Layout';
 import DashboardPage from './pages/DashboardPage';
@@ -15,6 +16,7 @@ import SettingsPage from './pages/SettingsPage';
 function App() {
   return (
     <ErrorBoundary>
+      <PasswordGate>
       <VocabularyProvider>
         <BrowserRouter>
           <Routes>
@@ -32,6 +34,7 @@ function App() {
           </Routes>
         </BrowserRouter>
       </VocabularyProvider>
+      </PasswordGate>
     </ErrorBoundary>
   );
 }
