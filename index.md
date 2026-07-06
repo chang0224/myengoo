@@ -1,9 +1,10 @@
 # 📚 Engoo 학습 인덱스
 
-> 총 13개 기사 · 마지막 업데이트: 2026-06-20
+> 총 14개 기사 · 마지막 업데이트: 2026-07-06
 
 | 날짜 | 제목 | 원문 | 통합 | 단어장 | 단어 수 |
 |------|------|------|------|--------|---------|
+| 2026-07-06 | STORK Security Talk: Key Bridge Design | [원문](contents/2026-07-06_stork-security-talk-key-bridge.md) | [📖](daily_news/2026-07-06_stork-security-talk-key-bridge.md) | [📚](words/2026-07-06_stork-security-talk-key-bridge.md) | 10 |
 | 2026-06-20 | English Confidence in Silicon Valley | [원문](contents/2026-06-20_english-confidence-silicon-valley.md) | [📖](daily_news/2026-06-20_english-confidence-silicon-valley.md) | [📚](words/2026-06-20_english-confidence-silicon-valley.md) | 12 |
 | 2026-06-18 | Musk Becomes World's First Trillionaire After SpaceX IPO | [원문](contents/2026-06-18_musk-first-trillionaire-spacex-ipo.md) | [📖](daily_news/2026-06-18_musk-first-trillionaire-spacex-ipo.md) | [📚](words/2026-06-18_musk-first-trillionaire-spacex-ipo.md) | 8 |
 | 2026-06-17 | Airbnb Program Helps Seoul Mothers Return to Work | [원문](contents/2026-06-17_airbnb-helps-seoul-mothers-work.md) | [📖](daily_news/2026-06-17_airbnb-helps-seoul-mothers-work.md) | [📚](words/2026-06-17_airbnb-helps-seoul-mothers-work.md) | 8 |
