@@ -77,3 +77,42 @@
 
 - **over time** [¶2](../contents/2026-04-24_technology-slow-cognitive-decline.md#¶2) — 시간이 지나면서, 점차
   - "using too much technology could, over time, cause memory problems"
+
+---
+
+## 🗣️ 유용한 표현
+
+- **have been done on ~** [¶1](../contents/2026-04-24_technology-slow-cognitive-decline.md#¶1)
+  - 뜻: ~에 관한 연구/조사가 이루어져 왔다 (연구 언급 시 자주 쓰는 수동태 패턴)
+  - 본문: "Many studies **have been done on** the possible negative effects of technology use"
+  - 활용: A lot of research has been done on the benefits of exercise for mental health.
+
+- **One concern is ~** [¶2](../contents/2026-04-24_technology-slow-cognitive-decline.md#¶2)
+  - 뜻: 한 가지 우려/문제는 ~이다 (여러 중 하나를 꺼낼 때)
+  - 본문: "**One concern is** what has been called 'digital dementia'"
+  - 활용: One concern is that remote workers may feel isolated over time.
+
+- **challenges that idea** [¶3](../contents/2026-04-24_technology-slow-cognitive-decline.md#¶3)
+  - 뜻: 그 생각[통념]에 이의를 제기한다 (반박할 때)
+  - 본문: "But a new study **challenges that idea**, finding that older people who use smartphones show lower rates of cognitive decline."
+  - 활용: This experiment challenges the idea that more practice always leads to better results.
+
+- **for example,** [¶7](../contents/2026-04-24_technology-slow-cognitive-decline.md#¶7)
+  - 뜻: 예를 들어 (구체적 예시를 들어 설명할 때 쓰는 담화 표지)
+  - 본문: "There could be different reasons for this — **for example,** using technology could help keep the brain active."
+  - 활용: There are many ways to reduce stress — for example, regular exercise or meditation.
+
+- **more research is needed** [¶8](../contents/2026-04-24_technology-slow-cognitive-decline.md#¶8)
+  - 뜻: 더 많은 연구가 필요하다 (결론을 유보하거나 조심스러운 입장을 표현할 때)
+  - 본문: "However, some say **more research is needed**, because the studies didn't look at how each person was using technology."
+  - 활용: More research is needed before we can recommend this treatment widely.
+
+- **it's not clear if ~** [¶9](../contents/2026-04-24_technology-slow-cognitive-decline.md#¶9)
+  - 뜻: ~인지는 불분명하다, ~인지 확실하지 않다
+  - 본문: "so **it's not clear if** the same effect would be seen among people who have used this technology for most of their lives."
+  - 활용: It's not clear if the new policy will apply to part-time employees as well.
+
+- **Still,** [¶10](../contents/2026-04-24_technology-slow-cognitive-decline.md#¶10)
+  - 뜻: 그래도, 그럼에도 불구하고 (앞의 부정적 내용 뒤에 긍정적 전환을 할 때)
+  - 본문: "**Still,** it's a good starting point for better understanding ways to stop or slow cognitive decline."
+  - 활용: The project has its flaws. Still, it's a promising step in the right direction.

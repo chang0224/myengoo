@@ -62,3 +62,42 @@
 - **brisk trade** [¶7](../contents/2026-05-12_two-uk-pubs-closed-daily.md#¶7) — 활발한 장사·거래. `do a brisk trade` 형태로 자주 쓰임.
 - **come up with a plan** [¶8](../contents/2026-05-12_two-uk-pubs-closed-daily.md#¶8) — 계획을 마련하다, 방안을 내놓다. `come up with`은 추상적 아이디어를 만들어낼 때 쓰는 핵심 구동사.
 - **a fun night out** [Ex.4](../contents/2026-05-12_two-uk-pubs-closed-daily.md#Ex.4) — 즐거운 밤 외출. `night out`은 친구들과 저녁에 외출하는 것 (보통 술·식사).
+
+---
+
+## 🗣️ 유용한 표현
+
+- **not just ~ but ~** [¶1](../contents/2026-05-12_two-uk-pubs-closed-daily.md#¶1)
+  - 뜻: "단지 ~뿐만 아니라 ~이기도 하다" — 범위를 확장하거나 강조할 때 쓰는 대조·부연 패턴.
+  - 본문: "Not just somewhere to eat and drink, they provide a 'third space' outside the home or work"
+  - 활용: She's not just a colleague but a close friend. / It's not just about money but about quality of life.
+
+- **At the same time,** [¶4](../contents/2026-05-12_two-uk-pubs-closed-daily.md#¶4)
+  - 뜻: "동시에, 한편으로는" — 앞 내용에 병행하는 상황이나 전환점을 소개하는 담화 표지.
+  - 본문: "At the same time, British people are drinking less."
+  - 활용: The new policy creates jobs. At the same time, it raises concerns about the environment.
+
+- **This may be because** [¶5](../contents/2026-05-12_two-uk-pubs-closed-daily.md#¶5)
+  - 뜻: "이것은 ~때문일 수 있다" — 원인을 조심스럽게 추측할 때 쓰는 패턴.
+  - 본문: "this may be because the British population is getting older"
+  - 활용: Sales dropped last quarter. This may be because of rising inflation. / He seemed distracted — this may be because he's under a lot of stress.
+
+- **It may also be because** [¶5](../contents/2026-05-12_two-uk-pubs-closed-daily.md#¶5)
+  - 뜻: "이것은 또한 ~때문일 수도 있다" — 추가 원인을 제시할 때 쓰는 확장 패턴.
+  - 본문: "It may also be because people are becoming more health conscious"
+  - 활용: It may also be because younger consumers prefer online shopping. / It may also be because the team lacked clear leadership.
+
+- **represent a loss of** [¶3](../contents/2026-05-12_two-uk-pubs-closed-daily.md#¶3)
+  - 뜻: "~의 손실을 나타내다, ~만큼의 손실에 해당하다" — 수치·규모를 공식적으로 표현하는 패턴.
+  - 본문: "these closures represent a loss of around 2,400 jobs"
+  - 활용: The budget cuts represent a loss of nearly 500 teaching positions. / This deal represents a loss of market share for the company.
+
+- **like a lot of countries** [¶6](../contents/2026-05-12_two-uk-pubs-closed-daily.md#¶6)
+  - 뜻: "많은 나라들처럼" — 유사한 사례와 비교해 보편성을 강조하는 표현.
+  - 본문: "Like a lot of countries, the UK is experiencing a cost-of-living crisis."
+  - 활용: Like a lot of cities, Seoul is dealing with an affordable housing shortage. / Like a lot of businesses, they had to adapt quickly during the pandemic.
+
+- **so that fewer have to** [¶8](../contents/2026-05-12_two-uk-pubs-closed-daily.md#¶8)
+  - 뜻: "그래서 더 적은 수가 ~하지 않아도 되도록" — 목적절로 바람직한 결과를 표현하는 패턴.
+  - 본문: "to lower the costs of running a pub so that fewer have to close"
+  - 활용: We need better public transport so that fewer people have to drive. / Improve working conditions so that fewer employees need to resign.

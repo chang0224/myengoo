@@ -203,3 +203,42 @@ and we will see / that the comeback of nuclear / will be very strong," / he said
 
 - **close behind** [¶4](#¶4) — 바짝 뒤따르는
   - "**Close behind**, China operates 61 reactors"
+
+---
+
+## 🗣️ 유용한 표현
+
+- **there's a growing ~** [¶2](#¶2)
+  - 뜻: 점점 커지는 ~이 있다, ~가 확산되고 있다 (추세·움직임의 성장을 표현)
+  - 본문: "**there's a growing** nuclear revival — a global trend given a big boost by the energy crisis"
+  - 활용: There's a growing demand for electric vehicles in urban areas.
+
+- **given a big boost by ~** [¶2](#¶2)
+  - 뜻: ~에 의해 큰 탄력을 받은, ~덕분에 크게 촉진된
+  - 본문: "a global trend **given a big boost by** the energy crisis caused by war in the Middle East"
+  - 활용: The startup was given a big boost by a major investment from a tech giant.
+
+- **Though there is disagreement on ~** [¶5](#¶5)
+  - 뜻: 비록 ~에 대해 의견 불일치가 있지만 (다양한 입장이 있음을 인정하며 전환할 때)
+  - 본문: "**Though there is disagreement** within Europe **on** nuclear power, the European Commission now sees nuclear power as a clean energy essential for climate goals."
+  - 활용: Though there is disagreement on the exact timeline, most experts agree that action is urgent.
+
+- **be seen as ~** [¶11](#¶11)
+  - 뜻: ~로 여겨지다, ~로 간주되다 (일반적인 인식을 표현)
+  - 본문: "It's **seen as** a secure electricity generation system"
+  - 활용: Remote work is now seen as a standard option in many companies.
+
+- **despite the risks of ~** [¶9](#¶9)
+  - 뜻: ~의 위험에도 불구하고 (위험 요소를 인정하면서 역접)
+  - 본문: "Ukraine still relies on nuclear plants for about half its electricity, **despite the risks of** active war."
+  - 활용: The team pressed on with the launch despite the risks of a tight deadline.
+
+- **leads the world in ~** [¶4](#¶4)
+  - 뜻: ~에서 세계를 선도하다, ~분야 세계 1위다
+  - 본문: "China operates 61 reactors and **leads the world in** new builds"
+  - 활용: South Korea leads the world in broadband internet speed.
+
+- **while reviewing ~** [¶9](#¶9)
+  - 뜻: ~을 검토하면서, ~을 되짚는 동시에 (병행 동작)
+  - 본문: "Japan has restarted 15 reactors **while reviewing** lessons from the Fukushima nuclear accident."
+  - 활용: The company is expanding into new markets while reviewing its core business strategy.

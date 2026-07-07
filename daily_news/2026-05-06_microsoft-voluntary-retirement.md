@@ -201,3 +201,42 @@ Have a discussion / based on the following questions.
 - **as part of efforts to** [¶1](#¶1) — ~하기 위한 노력의 일환으로 (뉴스 기사에서 정책·조치의 배경을 설명할 때 자주 쓰임)
 - **The move comes as** [¶5](#¶5) — 이 조치는 ~하는 가운데 나왔다 (시사 기사에서 특정 행동의 맥락을 소개하는 전형적 표현)
 - **take the next step** [¶9](#¶9) — 다음 단계를 밟다, 새 출발을 하다
+
+---
+
+## 🗣️ 유용한 표현
+
+- **while ~ing** [¶1](#¶1)
+  - 뜻: "~하면서, ~하는 동시에" — 두 가지 일이 동시에 진행됨을 나타내는 분사구문.
+  - 본문: "as part of efforts to reduce staff while increasing spending on AI"
+  - 활용: She managed to stay calm while dealing with the crisis. / He listens to podcasts while commuting to work.
+
+- **is open to** [¶3](#¶3)
+  - 뜻: "~에게 열려 있다, ~가 참여할 수 있다" — 자격·접근 가능성을 나타내는 표현.
+  - 본문: "The program is open to employees at the senior director level and below"
+  - 활용: The competition is open to students from all universities. / The position is open to both internal and external candidates.
+
+- **according to** [¶2](#¶2)
+  - 뜻: "~에 따르면" — 정보 출처를 밝힐 때 쓰는 뉴스·보고서 핵심 표현.
+  - 본문: "Around 7% of the company's US workers will be eligible, according to CNBC."
+  - 활용: According to recent surveys, remote work is becoming more common. / The meeting was postponed, according to the manager.
+
+- **One of the big reasons for this is** [¶5](#¶5)
+  - 뜻: "이것의 큰 이유 중 하나는 ~이다" — 원인을 제시하는 격식 담화 패턴.
+  - 본문: "One of the big reasons for this is the impact of AI, which is changing the way these companies work."
+  - 활용: One of the big reasons for this is the lack of funding. / One of the main reasons for this trend is changing consumer behavior.
+
+- **do the same** [¶7](#¶7)
+  - 뜻: "같은 일을 하다, 따라 하다" — 앞서 언급된 행동을 반복하거나 동참함을 표현.
+  - 본문: "Other tech companies, like Amazon and Alphabet, are doing the same."
+  - 활용: Many European countries are doing the same to tackle climate change. / I wanted to quit, and it turns out my colleague did the same.
+
+- **what it is today** [¶8](#¶8)
+  - 뜻: "오늘날의 모습으로, 지금의 그것으로" — 현재 상태·위상을 가리키는 관용 표현.
+  - 본문: "helping Microsoft become what it is today"
+  - 활용: She helped build the company into what it is today. / Years of hard work made him what he is today.
+
+- **be supported by** [¶10](#¶10)
+  - 뜻: "~의 지원을 받다, ~에 의해 뒷받침되다" — 수동태로 지원·근거를 표현할 때 사용.
+  - 본문: "this program will help workers take the next step in their lives while being supported by Microsoft"
+  - 활용: The project was supported by a grant from the government. / Employees will be supported by the HR team throughout the process.

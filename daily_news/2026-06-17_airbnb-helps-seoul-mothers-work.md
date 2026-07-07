@@ -210,3 +210,42 @@ What aspects / of running your own business / appeal to you?
 - **take part in ~** [¶9](#¶9) — ~에 참여하다. participate in과 같은 뜻의 구동사.
 - **not only A, (it's) also B** [¶11](#¶11) — A뿐만 아니라 B도. 추가적 이점을 강조할 때 쓰는 구문.
 - **left the workforce** [Ex.4](#Ex.4) — 노동시장을 떠나다. 퇴직·육아 등으로 경제활동을 중단한 상황을 설명할 때 사용.
+
+---
+
+## 🗣️ 유용한 표현
+
+- **One of the reasons for this is that ~** [¶1](#¶1)
+  - 뜻: 이것의 이유 중 하나는 ~이라는 것이다. 복수의 원인 중 하나를 설명할 때 쓰는 패턴.
+  - 본문: "One of the reasons for this is that South Korean women often feel that starting a family could make it harder for them to build their careers."
+  - 활용: "One of the reasons for this is that remote work makes collaboration more difficult."
+
+- **find it difficult to ~** [¶2](#¶2)
+  - 뜻: ~하는 것을 어렵다고 느끼다. 경험이나 어려움을 표현할 때 쓰는 패턴.
+  - 본문: "mothers sometimes find it difficult to return to work after having children"
+  - 활용: "Many people find it difficult to maintain work-life balance."
+
+- **In other words,** [¶4](#¶4)
+  - 뜻: 다시 말해서. 앞서 말한 내용을 더 쉽게 바꿔 설명할 때 쓰는 담화 표지.
+  - 본문: "In other words, women who have left work to have children or look after family members."
+  - 활용: "The project went over budget. In other words, we need to cut costs elsewhere."
+
+- **The idea is that ~** [¶5](#¶5)
+  - 뜻: 발상의 핵심은 ~이라는 것이다. 아이디어나 계획의 목적을 설명할 때 쓰는 패턴.
+  - 본문: "The idea is that the program can help them to work in a flexible way that doesn't affect their family lives."
+  - 활용: "The idea is that by working fewer hours, employees can actually be more productive."
+
+- **It has been popular since the start.** [¶7](#¶7)
+  - 뜻: 시작부터 인기가 있었다. `since the start`는 '시작부터 줄곧'을 뜻하는 표현.
+  - 본문: "It has been popular since the start."
+  - 활용: "The product has been in high demand since the start of the year."
+
+- **even as ~** [¶11](#¶11)
+  - 뜻: ~하는 와중에도, ~하는데도. 동시에 발생하거나 상반된 흐름을 강조할 때 쓰는 패턴.
+  - 본문: "there are not enough hotel rooms in the capital even as tourist numbers continue to increase"
+  - 활용: "The company kept hiring even as the economy slowed down."
+
+- **What do you think are ~?** [Ex.4](#Ex.4)
+  - 뜻: ~은 무엇이라고 생각하는가? 간접 의문문으로 의견을 묻는 회화 패턴.
+  - 본문: "What do you think are the biggest challenges working mothers in your country face?"
+  - 활용: "What do you think are the main reasons young people are moving to cities?"
