@@ -237,3 +237,37 @@ Have a discussion / based on the following questions.
 - **yet to + 동사원형** [¶10](#¶10) — "아직 ~하지 않은." `had yet to publish`는 "아직 발표하지 않았던"이라는 미완료의 의미를 담는다.
 - **important enough to + 동사** [¶12](#¶12) — "~할 만큼 중요한." `enough to` 구문은 "~하기에 충분한"이라는 정도·자격을 표현한다.
 - **pass from one generation to the next** [¶13](#¶13) — "한 세대에서 다음 세대로 전달되다." 유전·전통·문화의 세습을 묘사하는 관용 표현.
+
+---
+
+## 🗣️ 유용한 표현
+
+- **It was ~ that ...** [¶1](#¶1)
+  - 뜻: "~한 것은 바로 …이었다" — 특정 정보를 강조하는 분열문(cleft sentence) 구조.
+  - 본문: "It was in a pub named The Eagle, in the center of Cambridge in the UK, that one lunchtime in 1953 a scientist announced he had 'found the secret of life.'"
+  - 활용: It was in Tokyo that I first tried sushi. / It was her perseverance that made the difference.
+
+- **may have been** [¶2](#¶2)
+  - 뜻: "~였을지도 모른다" — 과거 사실에 대한 추측을 나타내는 조동사 완료형.
+  - 본문: "But it may have been the most important."
+  - 활용: That may have been the best decision she ever made. / It may have been a mistake to trust him.
+
+- **although ~ said** [¶3](#¶3)
+  - 뜻: "비록 ~라고 말했지만" — 양보를 나타내는 접속사로 앞 내용에 단서나 반전을 추가.
+  - 본문: "although he later said he didn't remember that moment"
+  - 활용: Although she later said it was fine, I could tell she was upset.
+
+- **have been doing** [¶6](#¶6)
+  - 뜻: "~해오고 있었다" — 과거완료 진행형으로 과거 시점까지 계속된 행동을 표현.
+  - 본문: "Crick and Watson had been studying genes at the Cavendish Laboratory"
+  - 활용: They had been working on the project for two years before it was canceled.
+
+- **This has helped in** [¶14](#¶14)
+  - 뜻: "이것은 ~에 도움이 되어 왔다" — 현재완료로 지속적인 기여·효과를 나타내는 패턴.
+  - 본문: "This has helped in things like forensic science, treating diseases, identifying human remains"
+  - 활용: This research has helped in developing new treatments for cancer.
+
+- **what it is** [¶5](#¶5)
+  - 뜻: "그것이 그것이게 하는 것, 지금의 그것" — 정체성·본질을 표현하는 관용적 명사절.
+  - 본문: "contains the genetic information that makes every living thing what it is"
+  - 활용: It's your attitude that makes you what you are. / Hard work is what it is — there are no shortcuts.

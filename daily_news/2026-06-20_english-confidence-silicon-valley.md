@@ -931,3 +931,42 @@ Thank you so much / for watching / and we will see you / next time. / Bye.
 - **for the sake of** [¶15](#¶15) — "~을 위해서" (목적·이유를 강조)
 - **carve out** [¶16](#¶16) — "(영역·사업을) 개척하다, 자기만의 공간을 만들다"
 - **think outside of the box** [¶16](#¶16) — "틀 밖에서 생각하다, 고정관념을 깨다"
+
+---
+
+## 🗣️ 유용한 표현
+
+- **I feel like ~** [¶12](#¶12)
+  - 뜻: "~인 것 같다, ~느낌이다" (개인적인 감상·의견을 부드럽게 전달할 때)
+  - 본문: "I feel like this can apply to learning a language as well."
+  - 활용: I feel like we're missing something important here.
+
+- **It turns out (to be) ~** [¶10](#¶10)
+  - 뜻: "~인 것으로 밝혀졌다, 알고 보니 ~이었다" (예상과 다른 결과가 드러날 때)
+  - 본문: "turn out to be the best decision in my career"
+  - 활용: It turns out the bug was caused by a simple typo.
+
+- **That's when ~** [¶10](#¶10)
+  - 뜻: "그때가 바로 ~한 때이다" (특정 시점을 강조하며 이야기를 이어갈 때)
+  - 본문: "That's when he offered me to join his second startup."
+  - 활용: That's when I realized I needed to change my approach.
+
+- **I would say ~** [¶11](#¶11)
+  - 뜻: "말하자면 ~, ~라고 할 수 있겠다" (의견을 조심스럽게 또는 강조하여 표현할 때)
+  - 본문: "Kind of took a different path in life, I would say."
+  - 활용: I would say communication is the most important skill for a manager.
+
+- **whether ~ or not** [¶16](#¶16)
+  - 뜻: "~인지 아닌지" (선택·조건을 제시하며 논점을 명확히 할 때)
+  - 본문: "whether you enter global market or not, I highly recommend come to America"
+  - 활용: Whether you agree or not, this is the direction we're taking.
+
+- **at least in my experience** [¶14](#¶14)
+  - 뜻: "적어도 내 경험에서는" (개인 경험을 근거로 주장의 범위를 한정할 때)
+  - 본문: "But in America, at least in my experience, people are not really creating that type of boundary."
+  - 활용: At least in my experience, remote work actually improves productivity.
+
+- **doesn't necessarily ~** [¶14](#¶14)
+  - 뜻: "반드시 ~인 것은 아니다" (일반화에 반박하거나 예외를 인정할 때)
+  - 본문: "doesn't necessarily translate into a much better compensation"
+  - 활용: Working harder doesn't necessarily mean you'll get promoted faster.

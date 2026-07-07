@@ -163,3 +163,42 @@ What are / the biggest economic problems / your country is facing?
 - **far ahead** [¶9](#¶9) — 훨씬 앞서서. 큰 격차로 선두에 있을 때 사용.
 - **benefit from** [¶11](#¶11) — ~로부터 이익을 얻다, ~의 혜택을 받다.
 - **parent company** [¶12](#¶12) — 모회사. 다른 회사를 소유한 상위 기업.
+
+---
+
+## 🗣️ 유용한 표현
+
+- **is short for ~** [¶5](#¶5)
+  - 뜻: ~의 줄임말이다. 약어나 줄인 표현을 설명할 때 쓰는 패턴.
+  - 본문: "'Market cap' is short for 'market capitalization,' which is the value of a public company on the open market."
+  - 활용: "VC is short for venture capital." / "FYI is short for 'for your information'."
+
+- **It's not a direct ~** [¶5](#¶5)
+  - 뜻: 직접적인 ~은 아니다. 비교나 주장을 완화할 때 쓰는 패턴.
+  - 본문: "It's not a direct comparison."
+  - 활용: "It's not a direct criticism, but there's clearly room for improvement."
+
+- **But although ~** [¶7](#¶7)
+  - 뜻: ~이긴 하지만. 앞선 내용을 인정하면서 역접 논리를 전개할 때 쓰는 패턴.
+  - 본문: "But although GDP and market cap measure different things, Euronews said the comparison shows the financial power of the world's biggest companies."
+  - 활용: "But although the results weren't perfect, the team learned a great deal."
+
+- **putting it ahead of ~** [¶10](#¶10)
+  - 뜻: ~보다 앞서게 만들면서. 결과를 설명하는 분사구문으로 뒤에서 앞 내용을 부연할 때 씀.
+  - 본문: "Nvidia's market cap was $5.71 trillion, putting it ahead of Germany."
+  - 활용: "She scored 98 points, putting her ahead of all other candidates."
+
+- **as well as ~** [¶11](#¶11)
+  - 뜻: ~뿐만 아니라. 추가 항목을 자연스럽게 연결할 때 쓰는 패턴.
+  - 본문: "Its semiconductors are used to power AI systems as well as video games and much more."
+  - 활용: "She speaks French as well as Spanish and Italian."
+
+- **followed by ~** [¶13](#¶13)
+  - 뜻: ~이 뒤따르다. 순서나 순위를 나열할 때 쓰는 패턴.
+  - 본문: "The UK, India and France came next, followed by Microsoft and Amazon."
+  - 활용: "The CEO spoke first, followed by the head of marketing."
+
+- **Are you concerned by ~?** [Ex.3](#Ex.3)
+  - 뜻: ~에 대해 우려하는가? 걱정·우려를 묻는 격식체 표현.
+  - 본문: "Are you concerned by how powerful tech companies have become?"
+  - 활용: "Are you concerned by the pace of inflation in your country?"
