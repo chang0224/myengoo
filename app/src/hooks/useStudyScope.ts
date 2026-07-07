@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback } from 'react';
 import { useVocabulary, useExcludedItems } from './useVocabulary';
 import { generateItemId } from '../lib/parser';
-import type { KeyExpression, StudyItem, VocabularyWord } from '../types';
+import type { KeyExpression, StudyItem, UsefulExpression, VocabularyWord } from '../types';
 
 export interface DateRange {
   start: string;
@@ -14,7 +14,8 @@ export interface StudyScopeState {
   filteredItems: StudyItem[];
   filteredWords: VocabularyWord[];
   filteredExpressions: KeyExpression[];
-  itemCount: { words: number; expressions: number; total: number };
+  filteredUsefulExpressions: UsefulExpression[];
+  itemCount: { words: number; expressions: number; usefulExpressions: number; total: number };
 }
 
 function getItemKey(item: StudyItem): string {
@@ -22,7 +23,7 @@ function getItemKey(item: StudyItem): string {
 }
 
 export function useStudyScope(): StudyScopeState {
-  const { allItems, allWords, allExpressions } = useVocabulary();
+  const { allItems, allWords, allExpressions, allUsefulExpressions } = useVocabulary();
   const { excludedIds } = useExcludedItems();
   const [dateRange, setDateRange] = useState<DateRange | null>(null);
 
@@ -48,12 +49,17 @@ export function useStudyScope(): StudyScopeState {
     () => filterExcluded(filterByRange(allExpressions)),
     [filterByRange, filterExcluded, allExpressions],
   );
+  const filteredUsefulExpressions = useMemo<UsefulExpression[]>(
+    () => filterExcluded(filterByRange(allUsefulExpressions)),
+    [filterByRange, filterExcluded, allUsefulExpressions],
+  );
 
   const itemCount = useMemo(() => ({
     words: filteredWords.length,
     expressions: filteredExpressions.length,
+    usefulExpressions: filteredUsefulExpressions.length,
     total: filteredItems.length,
-  }), [filteredWords, filteredExpressions, filteredItems]);
+  }), [filteredWords, filteredExpressions, filteredUsefulExpressions, filteredItems]);
 
-  return { dateRange, setDateRange, filteredItems, filteredWords, filteredExpressions, itemCount };
+  return { dateRange, setDateRange, filteredItems, filteredWords, filteredExpressions, filteredUsefulExpressions, itemCount };
 }

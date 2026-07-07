@@ -23,8 +23,20 @@ export interface KeyExpression {
   sourceDate: string;
 }
 
+// Useful expression from 🗣️ 유용한 표현 section
+export interface UsefulExpression {
+  type: 'useful-expression';
+  expression: string;         // e.g., "It's not that ~ but ~"
+  koreanExplanation: string;  // 뜻: e.g., "~이 아니라 ~이다"
+  contextQuote: string;       // 본문: actual sentence from article
+  exampleSentence: string;    // 활용: learner example sentence
+  contextRef: string;         // e.g., "¶6"
+  sourceFile: string;
+  sourceDate: string;
+}
+
 // Union type for study modes — discriminated by `type` field
-export type StudyItem = VocabularyWord | KeyExpression;
+export type StudyItem = VocabularyWord | KeyExpression | UsefulExpression;
 
 // SRS record per study item (SM-2 algorithm fields)
 export interface SRSRecord {
@@ -52,6 +64,7 @@ export interface ParsedVocabularyFile {
   title: string;             // e.g., "Technology May Slow Cognitive Decline in Older Adults"
   words: VocabularyWord[];
   expressions: KeyExpression[];
+  usefulExpressions: UsefulExpression[];
 }
 
 // App-wide user settings

@@ -27,10 +27,17 @@ function formatInterval(days: number): string {
 
 function ItemCard({ item, flipped }: { item: StudyItem; flipped: boolean }) {
   if (!flipped) {
+    const badgeColor = item.type === 'word'
+      ? 'bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300'
+      : item.type === 'useful-expression'
+        ? 'bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300'
+        : 'bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300';
+    const badgeLabel = item.type === 'word' ? '단어' : item.type === 'useful-expression' ? '유용한 표현' : '표현';
+
     return (
       <div className="flex flex-col items-center justify-center h-full gap-3 p-6">
-        <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${item.type === 'word' ? 'bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300' : 'bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300'}`}>
-          {item.type === 'word' ? '단어' : '표현'}
+        <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${badgeColor}`}>
+          {badgeLabel}
         </span>
         <p className="text-3xl font-bold text-gray-900 dark:text-white text-center">
           {item.type === 'word' ? item.word : item.expression}
@@ -52,6 +59,12 @@ function ItemCard({ item, flipped }: { item: StudyItem; flipped: boolean }) {
       )}
       {item.type === 'expression' && (
         <p className="text-sm text-gray-600 dark:text-gray-300 text-center italic">"{item.contextQuote}"</p>
+      )}
+      {item.type === 'useful-expression' && (
+        <>
+          <p className="text-sm text-gray-600 dark:text-gray-300 text-center italic">"{item.contextQuote}"</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400 text-center mt-1">활용: {item.exampleSentence}</p>
+        </>
       )}
     </div>
   );

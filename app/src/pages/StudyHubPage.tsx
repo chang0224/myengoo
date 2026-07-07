@@ -18,7 +18,7 @@ export default function StudyHubPage() {
 
       <div className="p-4">
         <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-          학습 범위: {itemCount.words}단어 · {itemCount.expressions}표현
+          학습 범위: {itemCount.words}단어 · {itemCount.expressions}표현 · {itemCount.usefulExpressions}유용한 표현
         </p>
 
         <div className="flex flex-col gap-3">

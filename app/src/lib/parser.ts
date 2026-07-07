@@ -1,13 +1,18 @@
-import type { KeyExpression, ParsedVocabularyFile, VocabularyWord } from '../types';
+import type { KeyExpression, ParsedVocabularyFile, UsefulExpression, VocabularyWord } from '../types';
 
 const VOCAB_SECTION_HEADER = '## 📚 B2+ 단어장';
 const EXPRESSION_SECTION_HEADER = '## 💡 핵심 표현';
+const USEFUL_EXPRESSION_HEADER = '## 🗣️ 유용한 표현';
 
 const VOCABULARY_LINE_RE = /^\*\*(.+?)\*\*(?:\s*\(pl\.\s*\*\*.+?\*\*\s*\/[^)]+\/\))?\s*\/([^/]+)\/\s*\[([^\]]+)\]\s*(.+)$/;
 const CONTEXT_LINE_RE = /^-\s*본문\s*\[([^\]]+)\]\([^)]+\):\s*"(.+)"$/;
 const EXAMPLE_LINE_RE = /^-\s*예문:\s*(.+)$/;
 const EXPRESSION_LINE_RE = /^-\s*\*\*(.+?)\*\*\s*\[([^\]]+)\]\([^)]+\)\s*—\s*(.+)$/;
 const EXPRESSION_QUOTE_RE = /^\s+-\s*"(.+)"$/;
+const USEFUL_EXPR_HEAD_RE = /^-\s*\*\*(.+?)\*\*\s*\[([^\]]+)\]\([^)]+\)$/;
+const USEFUL_EXPR_MEANING_RE = /^\s+-\s*뜻:\s*(.+)$/;
+const USEFUL_EXPR_CONTEXT_RE = /^\s+-\s*본문:\s*"?(.+?)"?\s*$/;
+const USEFUL_EXPR_EXAMPLE_RE = /^\s+-\s*활용:\s*(.+)$/;
 
 function stripBoldMarkers(text: string): string {
   return text.replace(/\*\*(.+?)\*\*/g, '$1').trim();
@@ -33,6 +38,7 @@ export function parseVocabularyFile(content: string, fileName: string): ParsedVo
 
   const vocabStart = lines.findIndex((line) => line.trim() === VOCAB_SECTION_HEADER);
   const expressionStart = lines.findIndex((line) => line.trim() === EXPRESSION_SECTION_HEADER);
+  const usefulStart = lines.findIndex((line) => line.trim() === USEFUL_EXPRESSION_HEADER);
 
   if (vocabStart === -1) {
     console.warn(`[parser:${fileName}] Missing vocabulary section header: ${VOCAB_SECTION_HEADER}`);
@@ -44,9 +50,10 @@ export function parseVocabularyFile(content: string, fileName: string): ParsedVo
 
   const words: VocabularyWord[] = [];
   const expressions: KeyExpression[] = [];
+  const usefulExpressions: UsefulExpression[] = [];
 
   if (vocabStart !== -1) {
-    const vocabEnd = expressionStart === -1 ? lines.length : expressionStart;
+    const vocabEnd = expressionStart !== -1 ? expressionStart : (usefulStart !== -1 ? usefulStart : lines.length);
 
     for (let i = vocabStart + 1; i < vocabEnd; i += 1) {
       const line = lines[i];
@@ -99,7 +106,9 @@ export function parseVocabularyFile(content: string, fileName: string): ParsedVo
   }
 
   if (expressionStart !== -1) {
-    for (let i = expressionStart + 1; i < lines.length; i += 1) {
+    const expressionEnd = usefulStart !== -1 ? usefulStart : lines.length;
+
+    for (let i = expressionStart + 1; i < expressionEnd; i += 1) {
       const line = lines[i];
 
       if (isSkippableLine(line)) {
@@ -138,11 +147,70 @@ export function parseVocabularyFile(content: string, fileName: string): ParsedVo
     }
   }
 
+  if (usefulStart !== -1) {
+    for (let i = usefulStart + 1; i < lines.length; i += 1) {
+      const line = lines[i];
+
+      if (isSkippableLine(line)) {
+        continue;
+      }
+
+      const headMatch = line.match(USEFUL_EXPR_HEAD_RE);
+
+      if (!headMatch) {
+        warnMalformed(fileName, i + 1, 'Skipping malformed useful expression line', line);
+        continue;
+      }
+
+      const meaningLine = lines[i + 1] ?? '';
+      const contextLine = lines[i + 2] ?? '';
+      const exampleLine = lines[i + 3] ?? '';
+
+      const meaningMatch = meaningLine.match(USEFUL_EXPR_MEANING_RE);
+      const contextMatch = contextLine.match(USEFUL_EXPR_CONTEXT_RE);
+      const exampleMatch = exampleLine.match(USEFUL_EXPR_EXAMPLE_RE);
+
+      if (!meaningMatch) {
+        warnMalformed(fileName, i + 2, 'Skipping useful expression with malformed meaning line', meaningLine);
+        continue;
+      }
+
+      if (!contextMatch) {
+        warnMalformed(fileName, i + 3, 'Skipping useful expression with malformed context line', contextLine);
+        continue;
+      }
+
+      if (!exampleMatch) {
+        warnMalformed(fileName, i + 4, 'Skipping useful expression with malformed example line', exampleLine);
+        continue;
+      }
+
+      const [, expression, contextRef] = headMatch;
+      const [, koreanExplanation] = meaningMatch;
+      const [, contextQuote] = contextMatch;
+      const [, exampleSentence] = exampleMatch;
+
+      usefulExpressions.push({
+        type: 'useful-expression',
+        expression: expression.trim(),
+        koreanExplanation: koreanExplanation.trim(),
+        contextQuote: stripBoldMarkers(contextQuote),
+        exampleSentence: exampleSentence.trim(),
+        contextRef: contextRef.trim(),
+        sourceFile: fileName,
+        sourceDate: date,
+      });
+
+      i += 3;
+    }
+  }
+
   return {
     fileName,
     date,
     title,
     words,
     expressions,
+    usefulExpressions,
   };
 }

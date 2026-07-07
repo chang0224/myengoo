@@ -3,7 +3,7 @@ import StudyScopeSelector from '../components/StudyScopeSelector';
 import { useStudyScope } from '../hooks/useStudyScope';
 import { useExcludedItems } from '../hooks/useVocabulary';
 import { generateItemId } from '../lib/parser';
-import type { KeyExpression, StudyItem, VocabularyWord } from '../types';
+import type { KeyExpression, StudyItem, UsefulExpression, VocabularyWord } from '../types';
 
 function CardFront({ item }: { item: StudyItem }) {
   if (item.type === 'word') {
@@ -14,6 +14,16 @@ function CardFront({ item }: { item: StudyItem }) {
         <p className="text-3xl font-bold text-gray-900 dark:text-white text-center">{word.word}</p>
         <p className="text-base text-gray-500 dark:text-gray-400 font-mono">{word.ipa}</p>
         <p className="text-sm text-gray-400 dark:text-gray-500">[{word.partOfSpeech}]</p>
+        <p className="text-xs text-gray-400 dark:text-gray-500 mt-2">탭하여 뒤집기</p>
+      </div>
+    );
+  }
+  if (item.type === 'useful-expression') {
+    const ue = item as UsefulExpression;
+    return (
+      <div className="flex flex-col items-center justify-center h-full gap-3 p-6">
+        <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300">유용한 표현</span>
+        <p className="text-2xl font-bold text-gray-900 dark:text-white text-center">{ue.expression}</p>
         <p className="text-xs text-gray-400 dark:text-gray-500 mt-2">탭하여 뒤집기</p>
       </div>
     );
@@ -37,6 +47,17 @@ function CardBack({ item }: { item: StudyItem }) {
         <p className="text-2xl font-bold text-indigo-600 dark:text-indigo-400 text-center">{word.definition}</p>
         <p className="text-sm text-gray-600 dark:text-gray-300 text-center italic mt-2">"{word.exampleSentence}"</p>
         <p className="text-xs text-gray-400 dark:text-gray-500 text-center mt-1">{word.contextRef}: {word.contextQuote}</p>
+      </div>
+    );
+  }
+  if (item.type === 'useful-expression') {
+    const ue = item as UsefulExpression;
+    return (
+<div className="flex flex-col items-center justify-center h-full gap-3 p-6">
+        <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300">유용한 표현</span>
+        <p className="text-2xl font-bold text-amber-600 dark:text-amber-400 text-center">{ue.koreanExplanation}</p>
+        <p className="text-sm text-gray-600 dark:text-gray-300 text-center italic mt-2">"{ue.contextQuote}"</p>
+        <p className="text-xs text-gray-500 dark:text-gray-400 text-center mt-1">활용: {ue.exampleSentence}</p>
       </div>
     );
   }

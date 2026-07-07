@@ -1,5 +1,5 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import type { AppSettings, ExcludedRecord, ParsedVocabularyFile, SRSRating, SRSRecord, StudyItem, VocabularyWord, KeyExpression } from '../types';
+import type { AppSettings, ExcludedRecord, ParsedVocabularyFile, SRSRating, SRSRecord, StudyItem, VocabularyWord, KeyExpression, UsefulExpression } from '../types';
 import { parseVocabularyFile } from '../lib/parser';
 import { createNewSRSRecord, reviewCard as srsReviewCard, getDueItems, getNewItems, getTodayISO } from '../lib/srs';
 import { loadSRSRecords, saveSRSRecords, loadSettings, saveSettings, loadExcludedRecords, saveExcludedRecords } from '../lib/storage';
@@ -19,6 +19,7 @@ interface VocabularyStore {
   files: ParsedVocabularyFile[];
   allWords: VocabularyWord[];
   allExpressions: KeyExpression[];
+  allUsefulExpressions: UsefulExpression[];
   allItems: StudyItem[];
   availableDates: string[];  // sorted descending
   isLoading: boolean;
@@ -148,12 +149,13 @@ export function VocabularyProvider({ children }: { children: React.ReactNode }) 
 
   const allWords = useMemo(() => files.flatMap(f => f.words), [files]);
   const allExpressions = useMemo(() => files.flatMap(f => f.expressions), [files]);
-  const allItems = useMemo<StudyItem[]>(() => [...allWords, ...allExpressions], [allWords, allExpressions]);
+  const allUsefulExpressions = useMemo(() => files.flatMap(f => f.usefulExpressions), [files]);
+  const allItems = useMemo<StudyItem[]>(() => [...allWords, ...allExpressions, ...allUsefulExpressions], [allWords, allExpressions, allUsefulExpressions]);
   const availableDates = useMemo(() => [...new Set(files.map(f => f.date))].sort((a, b) => b.localeCompare(a)), [files]);
 
   const getItemsByDate = useCallback((date: string): StudyItem[] => {
     const dateFiles = files.filter(f => f.date === date);
-    return dateFiles.flatMap(f => [...f.words, ...f.expressions]);
+    return dateFiles.flatMap(f => [...f.words, ...f.expressions, ...f.usefulExpressions]);
   }, [files]);
 
   const getWordsByDate = useCallback((date: string): VocabularyWord[] => {
@@ -164,6 +166,7 @@ export function VocabularyProvider({ children }: { children: React.ReactNode }) 
     files,
     allWords,
     allExpressions,
+    allUsefulExpressions,
     allItems,
     availableDates,
     isLoading,
@@ -171,7 +174,7 @@ export function VocabularyProvider({ children }: { children: React.ReactNode }) 
     getWordsByDate,
     contentsFiles,
     dailyNewsFiles,
-  }), [files, allWords, allExpressions, allItems, availableDates, isLoading, getItemsByDate, getWordsByDate, contentsFiles, dailyNewsFiles]);
+  }), [files, allWords, allExpressions, allUsefulExpressions, allItems, availableDates, isLoading, getItemsByDate, getWordsByDate, contentsFiles, dailyNewsFiles]);
 
   const today = getTodayISO();
 
