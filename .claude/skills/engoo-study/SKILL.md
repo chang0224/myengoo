@@ -114,6 +114,43 @@ were less likely / to experience cognitive decline.
   - Exercise에만 등장하는 단어: `[Ex.N](#Ex.N)` 또는 `[Ex.N](../contents/{파일명}.md#Ex.N)`
 - 같은 단어가 여러 문단에 나오면 **처음 등장한 문단** 기준.
 
+### 3.5단계: 유용한 표현 추출
+
+본문에서 **학습자가 바로 써먹을 수 있는 실용 패턴**을 선별합니다. 핵심 표현(관용구/연어)과 구분되는 **문장 구조·담화 표지·자주 쓰이는 패턴**입니다.
+
+**포함 기준:**
+- 담화 표지 (discourse markers): "The thing is," / "What I mean is," / "Here's the thing,"
+- 의견·태도 표현: "I would say ~" / "If you ask me," / "The way I see it,"
+- 빈도 높은 문장 패턴: "It's not that ~ but ~" / "The more ~ the more ~" / "whether ~ or not"
+- 양보·전환 구조: "That being said," / "Having said that," / "At the same time,"
+- 강조·부연 패턴: "What matters is ~" / "The point is ~" / "In other words,"
+- 일상 대화 패턴: "I feel like ~" / "It turns out ~" / "You don't have to ~"
+- 비즈니스·회의 표현: "Let me walk you through ~" / "To put it simply," / "The bottom line is ~"
+
+**제외 기준:**
+- 이미 핵심 표현에 포함된 관용구/구동사/연어 (중복 금지)
+- 너무 기초적인 패턴 (I think, I want to 등 A1~A2 수준)
+- 본문에 등장하지 않은 표현
+
+**판단 기준:** "한국 학습자가 이 패턴을 알면 영어 말하기/쓰기에서 즉시 활용 가능한가?" → yes면 포함.
+
+일반적으로 기사 1편당 **5~8개 정도**가 적정입니다.
+
+**각 표현 형식:**
+
+```markdown
+- **It's not that ~ but ~** [¶N](#¶N)
+  - 뜻: ~이 아니라 ~이다 (부분 부정 후 핵심 전달)
+  - 본문: "It's not that I couldn't speak, but I couldn't understand what they were saying."
+  - 활용: It's not that I don't like the idea, but I think we need more time.
+```
+
+- **패턴 형태**: 밑줄(`~`) 또는 가변 부분을 명시하여 학습자가 자기 문장에 대입 가능하게
+- **뜻**: 한국어로 패턴의 기능·용도를 짧게 설명
+- **본문**: 기사에서 이 패턴이 사용된 실제 문장 (또는 핵심 부분)
+- **활용**: 학습자가 바로 따라 쓸 수 있는 다른 예문 1개
+- **본문 링크 필수**: 단어장과 동일 규칙 (`[¶N](#¶N)` 또는 `[¶N](../contents/파일명.md#¶N)`)
+
 ### 4단계: 파일 출력 (3개 파일로 분리)
 
 결과를 **3개 파일**로 나눠 저장합니다. 출력 루트는 git 루트 디렉토리이거나 `index.md`가 있는 최상위 디렉토리입니다.
@@ -194,7 +231,7 @@ were less likely / to experience cognitive decline.
 
 **② `words/{date}_{slug}.md` — 단어장 전용**
 
-B2+ 단어와 핵심 표현만. 본문 링크는 `contents/` 파일의 헤딩 앵커로 **cross-file 링크**.
+B2+ 단어, 핵심 표현, 유용한 표현. 본문 링크는 `contents/` 파일의 헤딩 앵커로 **cross-file 링크**.
 
 ```markdown
 # 단어장: {기사 제목}
@@ -217,6 +254,15 @@ B2+ 단어와 핵심 표현만. 본문 링크는 `contents/` 파일의 헤딩 �
 ## 💡 핵심 표현
 
 - **표현** [¶N](../contents/{같은 파일명}.md#¶N) — 한국어 설명
+
+---
+
+## 🗣️ 유용한 표현
+
+- **패턴** [¶N](../contents/{같은 파일명}.md#¶N)
+  - 뜻: 한국어 설명
+  - 본문: "실제 사용된 문장"
+  - 활용: 학습자용 예문
 ```
 
 링크 타겟은 `contents/` 파일의 `#### ¶N` 헤딩입니다. Exercise 전용 단어는 `../contents/{파일명}.md#Ex.N`.
@@ -287,6 +333,15 @@ B2+ 단어와 핵심 표현만. 본문 링크는 `contents/` 파일의 헤딩 �
 ## 💡 핵심 표현
 
 - **표현** [¶N](#¶N) — 한국어 설명
+
+---
+
+## 🗣️ 유용한 표현
+
+- **패턴** [¶N](#¶N)
+  - 뜻: 한국어 설명
+  - 본문: "실제 사용된 문장"
+  - 활용: 학습자용 예문
 ```
 
 같은 파일 내 링크이므로 `(#¶N)` 형식 (경로 없음). `### ¶1` 헤딩이 Obsidian에서 자동 앵커가 됩니다. Exercise 전용 단어는 `(#Ex.N)`.
@@ -330,6 +385,8 @@ git 루트 디렉토리의 `index.md`를 확인하고 갱신합니다.
 - [ ] 단어장에 A1~B1 쉬운 단어가 섞여 있지 않은가 (한국 고졸 수준 단어 제외)
 - [ ] 모든 단어에 IPA · 품사 · 한국어 뜻 · **본문 링크** · 예문이 있는가
 - [ ] 핵심 표현에도 **본문 링크** `[¶N](#¶N)` 또는 `(../contents/...#¶N)` 가 있는가
+- [ ] 유용한 표현이 5~8개 포함되어 있고 핵심 표현과 중복되지 않는가
+- [ ] 유용한 표현에 패턴·뜻·본문·활용·본문 링크가 모두 있는가
 - [ ] `contents/` 파일: 각 문단에 `#### ¶N` 헤딩, Exercise에 `#### Ex.N` 헤딩이 있는가
 - [ ] `daily_news/` 파일: 각 직독직해에 `### ¶N` 헤딩, Exercise에 `### Ex.N` 헤딩이 있는가
 - [ ] **`<a id>` HTML 태그가 어디에도 없는가** (Obsidian 비호환 — 사용 금지)
