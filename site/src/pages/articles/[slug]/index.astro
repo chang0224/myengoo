@@ -38,7 +38,7 @@ const { Content: DailyNewsContent } = dailyNewsEntry
 // Parse vocabulary and rewrite raw cross-folder links to absolute site URLs
 const rawVocab = wordsEntry
   ? parseWordsFile(wordsEntry.body ?? '')
-  : { b2: [], keyExpressions: [] };
+  : { b2: [], keyExpressions: [], usefulExpressions: [] };
 
 const vocabData = {
   b2: rawVocab.b2.map((entry) => ({
@@ -46,6 +46,10 @@ const vocabData = {
     bodyQuote: { ...entry.bodyQuote, link: rewriteLink(entry.bodyQuote.link) },
   })),
   keyExpressions: rawVocab.keyExpressions.map((entry) => ({
+    ...entry,
+    link: rewriteLink(entry.link),
+  })),
+  usefulExpressions: rawVocab.usefulExpressions.map((entry) => ({
     ...entry,
     link: rewriteLink(entry.link),
   })),
@@ -142,7 +146,7 @@ const activeTab = url.searchParams.get('tab') ?? 'original';
     data-pagefind-body
     style={activeTab !== 'words' ? 'display: none;' : ''}
   >
-    {vocabData.b2.length === 0 && vocabData.keyExpressions.length === 0 ? (
+    {vocabData.b2.length === 0 && vocabData.keyExpressions.length === 0 && vocabData.usefulExpressions.length === 0 ? (
       <EmptyState message="이 기사의 단어장이 아직 없어요" />
     ) : (
       <div>
@@ -155,11 +159,47 @@ const activeTab = url.searchParams.get('tab') ?? 'original';
           </section>
         )}
         {vocabData.keyExpressions.length > 0 && (
-          <section>
+          <section class="mb-8">
             <h2 class="text-lg font-semibold mb-4" style="color: var(--fg);">💡 핵심 표현</h2>
             {vocabData.keyExpressions.map((entry) => (
               <KeyExpressionCard entry={entry} />
             ))}
+          </section>
+        )}
+        {vocabData.usefulExpressions.length > 0 && (
+          <section>
+            <h2 class="text-lg font-semibold mb-4" style="color: var(--fg);">🗣️ 유용한 표현</h2>
+            <div class="space-y-4">
+              {vocabData.usefulExpressions.map((entry) => (
+                <article
+                  class="rounded-lg p-4"
+                  style="background-color: var(--card-bg); border: 1px solid var(--border);"
+                >
+                  <div class="flex flex-wrap items-baseline gap-2 mb-2">
+                    <strong class="text-lg" style="color: var(--fg);">{entry.expression}</strong>
+                    <a
+                      href={entry.link}
+                      class="text-xs"
+                      style="color: var(--muted);"
+                    >[{entry.paraRef}]</a>
+                  </div>
+                  <p class="text-sm mb-2" style="color: var(--fg);">{entry.meaningKo}</p>
+                  {entry.bodyQuoteText && (
+                    <blockquote
+                      class="border-l-2 pl-3 my-2 text-sm italic"
+                      style="border-color: var(--border); color: var(--muted);"
+                    >
+                      "{entry.bodyQuoteText}"
+                    </blockquote>
+                  )}
+                  {entry.exampleEn && (
+                    <p class="text-sm mt-2" style="color: var(--muted);">
+                      <span class="font-medium">활용:</span> {entry.exampleEn}
+                    </p>
+                  )}
+                </article>
+              ))}
+            </div>
           </section>
         )}
       </div>
