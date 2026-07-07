@@ -106,8 +106,12 @@ export default function Flashcard({ items }: Props) {
 	const front = getFront(current);
 	const ipa = current.type === 'word' ? current.ipa : '';
 	const pos = current.type === 'word' ? current.pos : '';
-	const back = current.definitionKo;
-	const example = current.type === 'word' ? current.exampleEn : current.usageNoteKo ?? '';
+	const back = current.type === 'useful-expression' ? current.meaningKo : current.definitionKo;
+	const example = current.type === 'word'
+		? current.exampleEn
+		: current.type === 'useful-expression'
+			? current.exampleEn
+			: current.usageNoteKo ?? '';
 
 	return (
 		<div className="space-y-4">
@@ -122,7 +126,7 @@ export default function Flashcard({ items }: Props) {
 					>
 						✓ 알아요
 					</button>
-					<span>{current.type === 'word' ? '단어' : '표현'}</span>
+					<span>{current.type === 'word' ? '단어' : current.type === 'useful-expression' ? '유용한 표현' : '표현'}</span>
 				</div>
 			</div>
 

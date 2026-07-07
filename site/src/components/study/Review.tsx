@@ -157,9 +157,13 @@ export default function Review({ allItems, newItemBatchSize = 10 }: Props) {
 	const front = getFront(current.item);
 	const ipa = current.item.type === 'word' ? current.item.ipa : '';
 	const pos = current.item.type === 'word' ? current.item.pos : '';
-	const back = current.item.definitionKo;
+	const back = current.item.type === 'useful-expression' ? current.item.meaningKo : current.item.definitionKo;
 	const example =
-		current.item.type === 'word' ? current.item.exampleEn : current.item.usageNoteKo ?? '';
+		current.item.type === 'word'
+			? current.item.exampleEn
+			: current.item.type === 'useful-expression'
+				? current.item.exampleEn
+				: current.item.usageNoteKo ?? '';
 
 	return (
 		<div className="space-y-4">

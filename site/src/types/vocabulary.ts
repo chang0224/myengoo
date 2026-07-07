@@ -20,7 +20,17 @@ export interface KeyExpressionEntry {
 	usageNoteKo?: string;
 }
 
+export interface UsefulExpressionEntry {
+	expression: string;
+	paraRef: string;
+	link: string;
+	meaningKo: string;
+	bodyQuoteText: string;
+	exampleEn: string;
+}
+
 export interface WordsParseResult {
 	b2: B2WordEntry[];
 	keyExpressions: KeyExpressionEntry[];
+	usefulExpressions: UsefulExpressionEntry[];
 }

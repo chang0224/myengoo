@@ -4,9 +4,11 @@ import { rewriteLink } from './markdown/rewrite-link';
 import { parseWordsFile } from './parsers/words-parser';
 import {
 	makeExpressionId,
+	makeUsefulExpressionId,
 	makeWordId,
 	type StudyItem,
 	type UnifiedExpression,
+	type UnifiedUsefulExpression,
 	type UnifiedWord,
 	type VocabularySource,
 } from '../types/study';
@@ -20,6 +22,7 @@ interface ArticleMeta {
 export interface AggregatedStudy {
 	words: UnifiedWord[];
 	expressions: UnifiedExpression[];
+	usefulExpressions: UnifiedUsefulExpression[];
 	allItems: StudyItem[];
 	articleMetaBySlug: Map<string, ArticleMeta>;
 }
@@ -49,6 +52,7 @@ export async function loadStudyItems(): Promise<AggregatedStudy> {
 
 	const wordsById = new Map<string, UnifiedWord>();
 	const expressionsById = new Map<string, UnifiedExpression>();
+	const usefulExpressionsById = new Map<string, UnifiedUsefulExpression>();
 
 	const sortedWordsEntries = [...wordsEntries].sort((a, b) => {
 		const dateA = articleMetaBySlug.get(a.id)?.date ?? '';
@@ -123,6 +127,36 @@ export async function loadStudyItems(): Promise<AggregatedStudy> {
 				sources: [source],
 			});
 		}
+
+		for (const ue of parsed.usefulExpressions) {
+			const id = makeUsefulExpressionId(ue.expression);
+			const source: VocabularySource = {
+				articleSlug: meta.slug,
+				articleDate: meta.date,
+				articleTitle: meta.title,
+				paraRef: ue.paraRef,
+				link: rewriteLink(ue.link),
+				bodyQuote: ue.bodyQuoteText,
+			};
+
+			const existing = usefulExpressionsById.get(id);
+			if (existing) {
+				if (!existing.sources.some((s) => s.articleSlug === source.articleSlug)) {
+					existing.sources.push(source);
+					existing.sources.sort(compareByArticleDateDesc);
+				}
+				continue;
+			}
+
+			usefulExpressionsById.set(id, {
+				type: 'useful-expression',
+				id,
+				expression: ue.expression,
+				meaningKo: ue.meaningKo,
+				exampleEn: ue.exampleEn,
+				sources: [source],
+			});
+		}
 	}
 
 	const words = Array.from(wordsById.values()).sort((a, b) =>
@@ -131,11 +165,15 @@ export async function loadStudyItems(): Promise<AggregatedStudy> {
 	const expressions = Array.from(expressionsById.values()).sort((a, b) =>
 		a.expression.toLowerCase().localeCompare(b.expression.toLowerCase())
 	);
+	const usefulExpressions = Array.from(usefulExpressionsById.values()).sort((a, b) =>
+		a.expression.toLowerCase().localeCompare(b.expression.toLowerCase())
+	);
 
 	return {
 		words,
 		expressions,
-		allItems: [...words, ...expressions],
+		usefulExpressions,
+		allItems: [...words, ...expressions, ...usefulExpressions],
 		articleMetaBySlug,
 	};
 }

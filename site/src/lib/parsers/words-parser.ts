@@ -1,7 +1,8 @@
-import type { B2WordEntry, KeyExpressionEntry, WordsParseResult } from '../../types/vocabulary';
+import type { B2WordEntry, KeyExpressionEntry, UsefulExpressionEntry, WordsParseResult } from '../../types/vocabulary';
 
 const B2_SECTION = '## 📚 B2+ 단어장';
 const KEY_EXPRESSIONS_SECTION = '## 💡 핵심 표현';
+const USEFUL_EXPRESSIONS_SECTION = '## 🗣️ 유용한 표현';
 
 export function parseWordsFile(body: string): WordsParseResult {
 	const lines = body.split('\n');
@@ -9,6 +10,7 @@ export function parseWordsFile(body: string): WordsParseResult {
 	return {
 		b2: parseB2Section(getSectionLines(lines, B2_SECTION)),
 		keyExpressions: parseKeyExpressionSection(getSectionLines(lines, KEY_EXPRESSIONS_SECTION)),
+		usefulExpressions: parseUsefulExpressionSection(getSectionLines(lines, USEFUL_EXPRESSIONS_SECTION)),
 	};
 }
 
@@ -116,6 +118,63 @@ function parseKeyExpressionSection(lines: string[]): KeyExpressionEntry[] {
 
 	if (current) {
 		entries.push(current);
+	}
+
+	return entries;
+}
+
+function parseUsefulExpressionSection(lines: string[]): UsefulExpressionEntry[] {
+	const entries: UsefulExpressionEntry[] = [];
+	let i = 0;
+
+	while (i < lines.length) {
+		const line = lines[i];
+		const headMatch = line.match(/^- \*\*(.+?)\*\*\s+\[([^\]]+)\]\(([^)]+)\)/);
+
+		if (!headMatch) {
+			i += 1;
+			continue;
+		}
+
+		const expression = headMatch[1].trim();
+		const paraRef = headMatch[2].trim();
+		const link = headMatch[3].trim();
+
+		let meaningKo = '';
+		let bodyQuoteText = '';
+		let exampleEn = '';
+
+		for (let j = i + 1; j < Math.min(i + 5, lines.length); j += 1) {
+			const sub = lines[j];
+
+			const meaningMatch = sub.match(/^\s+-\s*뜻:\s*(.+)/);
+			if (meaningMatch) {
+				meaningKo = meaningMatch[1].trim();
+				continue;
+			}
+
+			const bodyMatch = sub.match(/^\s+-\s*본문:\s*"?(.+?)"?\s*$/);
+			if (bodyMatch) {
+				bodyQuoteText = bodyMatch[1].trim();
+				continue;
+			}
+
+			const exampleMatch = sub.match(/^\s+-\s*활용:\s*(.+)/);
+			if (exampleMatch) {
+				exampleEn = exampleMatch[1].trim();
+				continue;
+			}
+
+			if (sub.match(/^- \*\*/)) {
+				break;
+			}
+		}
+
+		if (meaningKo) {
+			entries.push({ expression, paraRef, link, meaningKo, bodyQuoteText, exampleEn });
+		}
+
+		i += 1;
 	}
 
 	return entries;

@@ -112,8 +112,10 @@ export default function ExcludedSettings({ allItems }: Props) {
 				<ul className="space-y-2">
 					{display.map(({ itemId, excludedAt, item }) => {
 						const label = item ? getFront(item) : itemId;
-						const meaning = item?.definitionKo ?? '';
-						const typeLabel = item?.type === 'expression' ? '표현' : '단어';
+						const meaning = item
+							? item.type === 'useful-expression' ? item.meaningKo : item.definitionKo
+							: '';
+						const typeLabel = item?.type === 'word' ? '단어' : item?.type === 'useful-expression' ? '유용한 표현' : '표현';
 
 						return (
 							<li

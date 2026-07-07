@@ -3,14 +3,14 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import EmptyState from '../../components/EmptyState.astro';
 import { loadStudyItems } from '../../lib/aggregator';
 
-const { words, expressions, articleMetaBySlug } = await loadStudyItems();
+const { words, expressions, usefulExpressions, articleMetaBySlug } = await loadStudyItems();
 
 const partsOfSpeech = Array.from(new Set(words.map((w) => w.pos))).sort();
 const articles = Array.from(articleMetaBySlug.values())
 	.filter((m) => m.date)
 	.sort((a, b) => b.date.localeCompare(a.date));
 
-const totalCount = words.length + expressions.length;
+const totalCount = words.length + expressions.length + usefulExpressions.length;
 ---
 <BaseLayout title="통합 단어장" description="모든 기사의 B2+ 단어와 핵심 표현을 한자리에서 학습">
 	<div class="mb-6">
@@ -18,7 +18,8 @@ const totalCount = words.length + expressions.length;
 		<p class="text-sm" style="color: var(--muted);">
 			총 <span data-stat-total>{totalCount}</span>개 ·
 			단어 <span data-stat-words>{words.length}</span> ·
-			표현 <span data-stat-expressions>{expressions.length}</span>
+			표현 <span data-stat-expressions>{expressions.length}</span> ·
+			유용한 표현 <span data-stat-useful>{usefulExpressions.length}</span>
 		</p>
 	</div>
 
@@ -43,6 +44,7 @@ const totalCount = words.length + expressions.length;
 					<option value="">전체</option>
 					<option value="word">단어</option>
 					<option value="expression">핵심 표현</option>
+					<option value="useful-expression">유용한 표현</option>
 				</select>
 			</label>
 
@@ -202,6 +204,67 @@ const totalCount = words.length + expressions.length;
 					</div>
 				</section>
 			)}
+
+			{usefulExpressions.length > 0 && (
+				<section data-section="useful-expressions">
+					<h2 class="text-lg font-semibold mb-4" style="color: var(--fg);">
+						🗣️ 유용한 표현 <span class="text-sm font-normal" style="color: var(--muted);">({usefulExpressions.length})</span>
+					</h2>
+					<div class="space-y-3">
+						{usefulExpressions.map((entry) => {
+							const articleSlugs = entry.sources.map((s) => s.articleSlug).join(',');
+							const searchHaystack = [
+								entry.expression,
+								entry.meaningKo,
+								entry.exampleEn,
+								...entry.sources.map((s) => s.bodyQuote),
+							]
+								.join(' ')
+								.toLowerCase();
+							return (
+								<article
+									data-vocab-entry
+									data-type="useful-expression"
+									data-pos=""
+									data-articles={articleSlugs}
+									data-search={searchHaystack}
+									class="rounded-lg p-4"
+									style="background-color: var(--card-bg); border: 1px solid var(--border);"
+								>
+									<div class="flex flex-wrap items-baseline gap-2 mb-2">
+										<strong class="text-lg" style="color: var(--fg);">{entry.expression}</strong>
+									</div>
+									<p class="text-sm mb-2" style="color: var(--fg);">{entry.meaningKo}</p>
+
+									{entry.sources.map((source) => (
+										<div class="my-2">
+											<a
+												href={source.link}
+												class="text-sm font-medium"
+												style="color: var(--muted);"
+											>[{source.articleTitle} · {source.paraRef}]</a>
+											{source.bodyQuote && (
+												<blockquote
+													class="border-l-2 pl-3 mt-1 text-sm italic"
+													style="border-color: var(--border); color: var(--muted);"
+												>
+													<span set:html={`"${source.bodyQuote}"`}></span>
+												</blockquote>
+											)}
+										</div>
+									))}
+
+									{entry.exampleEn && (
+										<p class="text-sm mt-2" style="color: var(--muted);">
+											<span class="font-medium">활용:</span> {entry.exampleEn}
+										</p>
+									)}
+								</article>
+							);
+						})}
+					</div>
+				</section>
+			)}
 		</div>
 	)}
 </BaseLayout>
@@ -222,7 +285,7 @@ const totalCount = words.length + expressions.length;
 		const article = articleSelect?.value ?? '';
 
 		let visibleCount = 0;
-		const visiblePerType: Record<string, number> = { word: 0, expression: 0 };
+		const visiblePerType: Record<string, number> = { word: 0, expression: 0, 'useful-expression': 0 };
 
 		for (const entry of entries) {
 			const entryType = entry.dataset.type ?? '';
@@ -245,7 +308,7 @@ const totalCount = words.length + expressions.length;
 
 		for (const section of sections) {
 			const sectionType = section.dataset.section ?? '';
-			const sectionTypeKey = sectionType === 'words' ? 'word' : 'expression';
+			const sectionTypeKey = sectionType === 'words' ? 'word' : sectionType === 'useful-expressions' ? 'useful-expression' : 'expression';
 			const hasVisible = (visiblePerType[sectionTypeKey] ?? 0) > 0;
 			section.style.display = hasVisible ? '' : 'none';
 		}

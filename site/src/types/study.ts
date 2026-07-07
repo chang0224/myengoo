@@ -27,7 +27,16 @@ export interface UnifiedExpression {
 	sources: VocabularySource[];
 }
 
-export type StudyItem = UnifiedWord | UnifiedExpression;
+export interface UnifiedUsefulExpression {
+	type: 'useful-expression';
+	id: string;
+	expression: string;
+	meaningKo: string;
+	exampleEn: string;
+	sources: VocabularySource[];
+}
+
+export type StudyItem = UnifiedWord | UnifiedExpression | UnifiedUsefulExpression;
 
 export function makeWordId(word: string, ipa: string): string {
 	return `w:${word.toLowerCase().trim()}|${ipa.trim()}`;
@@ -35,6 +44,10 @@ export function makeWordId(word: string, ipa: string): string {
 
 export function makeExpressionId(expression: string): string {
 	return `e:${expression.toLowerCase().trim()}`;
+}
+
+export function makeUsefulExpressionId(expression: string): string {
+	return `ue:${expression.toLowerCase().trim()}`;
 }
 
 export type SRSRating = 0 | 2 | 3 | 5;

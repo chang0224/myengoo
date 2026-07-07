@@ -25,7 +25,7 @@ function getEnglishText(item: StudyItem): string {
 }
 
 function getKoreanText(item: StudyItem): string {
-	return item.definitionKo;
+	return item.type === 'useful-expression' ? item.meaningKo : item.definitionKo;
 }
 
 export function getQuestionText(item: StudyItem, direction: QuizDirection): string {
